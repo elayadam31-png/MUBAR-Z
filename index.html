@@ -1,980 +1,665 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUBARIZ</title>
+    <title>Gələcəyin Xəritəsi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
-            color: #1f2937;
-            background-color: #fcfbf6;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92B5' fill-opacity='0.1'%3E%3Cpath d='M36 34.542L44.887 25.101 49.366 31.97L40.479 41.411 36 34.542zm5.774-12.793L51 22.75l-4.707-4.707L41.774 21.749zM20.849 53.25L24.896 59 34 44.976l-3.324-4.885-9.827 1.493-2.126 1.155zM.5 44.75h14v14h-14v-14zm13.344-3.078L9.208 40.528l-4.707 4.707 4.136 1.764L10.375 42.75zM44.75 34.25v-14h14v14h-14zm.845-12.822L51 18.22l4.707 4.707-4.136-1.764-4.136 4.136zM34.25 51.5h14v-14h-14v14zM40.25 38.5v4.5h4.5v-4.5h-4.5zM2.75 2.5h14v14h-14v-14zm3.036 12.016l-3.324-4.885 1.493-9.827 1.155-2.126 4.885 3.324L8.146 15zM22.25 24.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM42.25 10.5h-11a3.5 3.5 0 1 0 0-7h11a3.5 3.5 0 0 0 0 7zM45 44.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM20.5 48.5h-10a2.5 2.5 0 1 0 0-5h10a2.5 2.5 0 0 0 0 5z'/>%3C/g%3E%3C/g%3E%3C/svg%3E");
-            animation: movePattern 20s linear infinite;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        @keyframes movePattern {
-            from { background-position: 0 0; }
-            to { background-position: 60px 60px; }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 2rem 1rem;
         }
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        .header {
+            text-align: center;
+            padding-bottom: 2rem;
+            color: #FFD700;
         }
-        .chat-area {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            background-color: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1rem;
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
-        .message {
-            padding: 0.75rem 1rem;
-            border-radius: 1rem;
-            margin-bottom: 0.75rem;
-            max-width: 80%;
-            word-wrap: break-word;
-        }
-        .user-message {
-            background-color: #e2e8f0;
-            margin-left: auto;
-        }
-        .ai-message {
-            background-color: #f0f4f8;
-            margin-right: auto;
-        }
-        .input-area {
-            display: flex;
-        }
-        .input-area input {
-            flex-grow: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid #cbd5e0;
-            border-radius: 0.5rem;
-            outline: none;
-        }
-        .input-area button {
-            background-color: #3b82f6;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .input-area button:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-        }
-        .music-player-container {
-            position: fixed;
-            bottom: 6rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 400px;
-            background-color: #f1f5f9;
-            padding: 1rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-        .music-player-container img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 0.75rem;
-        }
-        .music-player-container progress {
-            height: 5px;
-            width: 100%;
-            -webkit-appearance: none;
-            appearance: none;
-            border-radius: 9999px;
-            overflow: hidden;
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
             margin-top: 0.5rem;
         }
-        .music-player-container progress::-webkit-progress-bar {
-            background-color: #e2e8f0;
+        .card {
+            background-color: #1E1E1E;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
         }
-        .music-player-container progress::-webkit-progress-value {
-            background-color: #3b82f6;
-            transition: width 0.3s ease;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
         }
-        .music-player-container button {
-            transition: transform 0.2s;
-        }
-        .music-player-container button:hover {
-            transform: scale(1.1);
-        }
-        /* Full Screen Player */
-        .full-screen-player {
-            position: fixed;
+        .card::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(to top, #e2e8f0, #fcfbf6);
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #FFD700, #3B82F6);
+            opacity: 0.1;
+            z-index: 0;
+            border-radius: 12px;
+        }
+        .card-content {
+            position: relative;
+            z-index: 1;
+        }
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .day-title svg {
+            margin-right: 0.75rem;
+            fill: #FFD700;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px dashed #444;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .task-time {
+            color: #8B5CF6;
+            font-weight: bold;
+        }
+        .task-description {
+            flex-grow: 1;
+            margin-left: 1rem;
+        }
+        .additional-info {
+            font-style: italic;
+            margin-top: 1rem;
+            color: #9CA3AF;
+        }
+        .special-day {
+            background-color: #3B82F6;
+            color: #fff;
+        }
+        .special-day .day-title {
+            color: #fff;
+        }
+        .weekend-card {
+            background-color: #2F2F2F;
+        }
+        .weekend-card .day-title {
+            color: #3B82F6;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #FFD700, #FF6347);
+            color: #121212;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .test-results, .edit-section {
+            background-color: #1E1E1E;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .test-results h2, .edit-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFD700;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .test-results input, .test-results textarea, .edit-section input, .edit-section textarea, .edit-section select {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: #E0E0E0;
+        }
+        .test-results button, .edit-section button {
+            width: 100%;
+            background: linear-gradient(45deg, #3B82F6, #8B5CF6);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .test-results button:hover, .edit-section button:hover {
+            transform: translateY(-2px);
+        }
+        .results-list {
+            margin-top: 1.5rem;
+            border-top: 1px solid #444;
+            padding-top: 1.5rem;
+        }
+        .result-item {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s ease;
+            position: relative;
             display: flex;
             flex-direction: column;
+        }
+        .result-item h3 {
+            font-size: 1.2rem;
+            color: #FFD700;
+            margin-bottom: 0.5rem;
+        }
+        .result-item p {
+            display: flex;
+            align-items: center;
+        }
+        .result-item p strong {
+            margin-right: 0.5rem;
+        }
+        .score-icon {
+            font-size: 1.2rem;
+            margin-left: 0.5rem;
+        }
+        .item-actions {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            z-index: 20;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
+            transition: transform 0.2s ease;
         }
-        .full-screen-player.active {
-            opacity: 1;
-            pointer-events: auto;
+        .action-btn:hover {
+            transform: scale(1.1);
         }
-        .full-screen-player .controls-container {
-            width: 100%;
-            max-width: 500px;
+        .delete-btn svg {
+            fill: #FF5A5A;
+            width: 1rem;
+            height: 1rem;
         }
-        .full-screen-player input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 8px;
-            background: #d3d3d3;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity .2s;
-            border-radius: 5px;
+        .edit-btn svg {
+            fill: #3B82F6;
+            width: 1rem;
+            height: 1rem;
         }
-        .full-screen-player input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #3b82f6;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-        .full-screen-player input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: #3b82f6;
-            cursor: pointer;
-            border-radius: 50%;
-        }
-        .drop-zone {
-            border: 2px dashed #9ca3af;
-            background-color: #f8fafc;
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            transition: background-color 0.3s ease;
-        }
-        .drop-zone.dragover {
-            background-color: #e2e8f0;
-            border-color: #3b82f6;
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
-<body class="page-container">
+<body>
 
-    <!-- Ana İçerik Alanı -->
-    <main id="main-content" class="flex-grow p-4 md:p-8 flex flex-col justify-center items-center text-center relative">
-        <h1 class="text-7xl font-extrabold text-gray-800 tracking-wider">MUBARIZ</h1>
-        <p class="text-lg md:text-xl text-gray-600 mt-4 mb-8 max-w-lg">
-            Geleceğin platformu burada başlıyor.
-        </p>
-    </main>
+<div class="container">
+    <div class="header">
+        <h1>Gələcəyin Xəritəsi</h1>
+        <p>Hər anını dəyərləndir, çünki gələcəyini bu gün qurursan!</p>
+    </div>
 
-    <!-- Mini Müzik Çalar -->
-    <div id="mini-player" class="music-player-container hidden cursor-pointer">
-        <div class="flex items-center space-x-4">
-            <img id="mini-player-cover" src="https://placehold.co/60x60/a2d2ff/003366?text=MUBASIC" alt="Müzik Kapağı">
-            <div class="flex-grow">
-                <p id="mini-player-title" class="text-base font-semibold truncate">Şarkı Adı</p>
-                <p id="mini-player-artist" class="text-sm text-gray-500 truncate">Sanatçı Adı</p>
+    <div id="schedule-container" class="space-y-6">
+        <!-- Həftəlik rutin dinamik olaraq burada yaradılacaq -->
+    </div>
+    
+    <!-- Sınaq Nəticələri Bölməsi -->
+    <div id="test-results-section" class="test-results">
+        <h2>Sınaq Nəticələrini Qeyd Et</h2>
+        <input type="date" id="test-date" class="bg-gray-800">
+        <input type="number" id="fizika-score" placeholder="Fizika balı (max 100)" class="bg-gray-800">
+        <input type="number" id="informatika-score" placeholder="İnformatika balı (max 100)" class="bg-gray-800">
+        <input type="number" id="riyaziyyat-score" placeholder="Riyaziyyat balı (max 100)" class="bg-gray-800">
+        <textarea id="comment" placeholder="Necə olduğunu yaz..." rows="3" class="bg-gray-800"></textarea>
+        
+        <button id="add-btn" onclick="addTestResult()">Nəticəni Əlavə Et</button>
+        <button id="save-btn" class="hidden" onclick="saveTestResult()">Dəyişiklikləri Yadda Saxla</button>
+
+        <div class="results-list" id="results-container">
+            <!-- Nəticələr buraya dinamik olaraq əlavə olunacaq -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Global state for results and the item being edited
+    let results = [];
+    let editingId = null;
+
+    // Default schedule data
+    let schedule = [
+        { day: 'Bazar Ertəsi', icon: '<path d="M21 4H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zm-1 14H4V6h16zM7 9h2v2H7zm0 4h2v2H7zm4 0h2v2h-2zm0-4h2v2h-2zm4 4h2v2h-2zm0-4h2v2h-2z"/>', tasks: [
+            { time: '07:30', description: 'Oyanış və Enerji ilə Başlanğıc' },
+            { time: '08:00', description: 'Sürətli Səhər Yeməyi' },
+            { time: '08:30', description: 'Dərsə Hazırlıq' },
+            { time: '10:00 - 18:00', description: 'Hazırlıq Dərsləri (İnformatika, Fizika, Riyaziyyat, İngilis dili)' },
+            { time: '20:00', description: 'Ev Tapşırıqları və Mövzuları Təkrar' },
+            { time: '22:00', description: 'İstirahət və Dərsdən Uzaqlaşma' }
+        ]},
+        { day: 'Çərşənbə Axşamı', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h2v-6h-2v6zm2.01-8.2c0-1.1-.9-2-2.01-2s-2 .9-2 2 .9 2 2 2 2.01-.9 2.01-2z"/>', tasks: [
+            { time: '07:30', description: 'Oyanış və Yüngül İdman' },
+            { time: '08:30', description: 'Sərbəst Ev Çalışması' },
+            { time: '15:00 - 18:00', description: 'Hazırlıq Dərsləri (İngilis dili, Azərbaycan dili)' },
+            { time: '19:00', description: 'Ev Tapşırıqları' },
+            { time: '21:30', description: 'Özünə Vaxt Ayır' }
+        ]},
+        { day: 'Çərşənbə', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-.99-13h1.98v5.59L15.34 16h-1.18l-2.47-3.8z"/>', tasks: [
+            { time: '07:30', description: 'Oyanış və Rutin Hazırlıq' },
+            { time: '10:00 - 16:00', description: 'Hazırlıq Dərsləri (İnformatika, Fizika, Riyaziyyat)' },
+            { time: '17:00', description: 'Ev Tapşırıqları və Dərs Təkrarı' },
+            { time: '19:00', description: 'İdman və Yaşamaq' },
+            { time: '20:30', description: 'Axşam İstirahəti' }
+        ]},
+        { day: 'Cümə Axşamı', icon: '<path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm-1 15h2v-2h-2v2zm0-4h2V7h-2v6z"/>', tasks: [
+            { time: '07:30', description: 'Oyanış' },
+            { time: '08:30', description: 'Dərslərə Sərbəst Hazırlıq' },
+            { time: '12:00', description: 'Azərbaycan Dili Dərsi' },
+            { time: '14:00', description: 'Ev Tapşırıqları' },
+            { time: '16:00', description: 'Sosiallaşma və İstirahət' }
+        ]},
+        { day: 'Cümə', icon: '<path d="M12 2c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm-1 11h-2v2h2v-2zm4 0h-2v2h2v-2zm0-4h-2v2h2V9zm-4 0h-2v2h2V9z"/>', tasks: [
+            { time: '07:30', description: 'Oyanış və Dərs Hazırlığı' },
+            { time: '10:00 - 16:00', description: 'Hazırlıq Dərsləri (İnformatika, Fizika, Riyaziyyat)' },
+            { time: '19:00', description: 'Ev Tapşırıqlarının Sonu' },
+            { time: '21:30', description: 'Həftə Sonuna Hazırlıq' }
+        ]},
+        { day: 'Şənbə', icon: '<path d="M12 2c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zM5 13h14v2H5zm0-2h14v-2H5z"/>', tasks: [
+            { time: '09:00', description: 'İngilis və Azərbaycan Dili Dərsləri' },
+            { time: '14:00', description: 'Həftənin Mövzularını Ümumi Təkrar' },
+            { time: '16:00', description: 'İdman və Yaşamaq' },
+            { time: '18:00', description: 'Sərbəst vaxt və əyləncə' }
+        ]},
+        { day: 'Bazar Günü', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>', tasks: [
+            { time: '10:00', description: 'Rahat Oyanış və Səhər Yeməyi' },
+            { time: '12:00', description: 'Həftəlik Ümumi Təkrar' },
+            { time: '13:00', description: 'Ailə və Dostlarla Vaxt' },
+            { time: '17:00', description: 'Gələn Həftəyə Yüngül Hazırlıq' },
+            { time: '19:00', description: 'Filmlər və ya Hobbi' }
+        ]}
+    ];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        const friday = new Date(today.setDate(today.getDate() - today.getDay() + 5));
+        const fridayString = friday.toISOString().slice(0, 10);
+        document.getElementById('test-date').value = fridayString;
+        
+        // Render initial content
+        renderSchedule();
+        renderResults();
+    });
+
+    // Render the schedule section
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        container.innerHTML = '';
+        schedule.forEach((dayData, dayIndex) => {
+            const card = document.createElement('div');
+            card.className = `card ${dayIndex >= 5 ? 'weekend-card' : ''}`;
+            
+            const cardContent = document.createElement('div');
+            cardContent.className = 'card-content';
+            
+            cardContent.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <h2 class="day-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">${dayData.icon}</svg>
+                        ${dayData.day}
+                    </h2>
+                    <button class="action-btn edit-btn" onclick="editSchedule(${dayIndex})">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14.06 9.06L15.94 10.94L18.41 8.47L16.53 6.59L14.06 9.06zM20.65 4.35C20.26 3.96 19.63 3.96 19.24 4.35L17.7 5.89L20.65 8.84L22.19 7.3C22.58 6.91 22.58 6.28 22.19 5.89L20.65 4.35zM12 18.01H2V20.01H12V18.01zM11.91 14.73L6.96 19.68C6.67 19.97 6.2 20.08 5.81 19.96L2.61 19.16C2.22 19.04 2.03 18.59 2.19 18.2L5.43 11.83L11.91 14.73z"/>
+                        </svg>
+                    </button>
+                </div>
+                <ul class="task-list" id="task-list-${dayIndex}">
+                    ${dayData.tasks.map(task => `
+                        <li class="task-item">
+                            <span class="task-time">${task.time}</span>
+                            <span class="task-description">${task.description}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            card.appendChild(cardContent);
+            container.appendChild(card);
+        });
+    }
+
+    // Opens a new editing UI for the schedule
+    function editSchedule(dayIndex) {
+        const dayData = schedule[dayIndex];
+        const newHtml = `
+            <div id="schedule-edit-section" class="edit-section">
+                <h2>Rutinə Dəyişiklik Et</h2>
+                <select id="edit-day-select" class="bg-gray-800 mb-4">
+                    ${schedule.map((day, index) => `<option value="${index}" ${index === dayIndex ? 'selected' : ''}>${day.day}</option>`).join('')}
+                </select>
+                <div id="edit-tasks-container" class="space-y-4">
+                    ${dayData.tasks.map((task, taskIndex) => `
+                        <div class="flex items-center gap-2">
+                            <input type="text" value="${task.time}" placeholder="Vaxt" data-task-index="${taskIndex}" data-field="time" class="bg-gray-800">
+                            <input type="text" value="${task.description}" placeholder="Tapşırıq" data-task-index="${taskIndex}" data-field="description" class="bg-gray-800 flex-grow">
+                            <button class="action-btn delete-btn" onclick="deleteTask(${taskIndex})">
+                                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm-2-4h2V9H4v6zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="my-4" onclick="addTask()">Yeni Tapşırıq Əlavə Et</button>
+                <button onclick="saveScheduleChanges(${dayIndex})">Yadda Saxla</button>
+                <button onclick="cancelScheduleEdit()">Ləğv Et</button>
             </div>
-            <div class="flex items-center space-x-2">
-                <button id="mini-play-pause-btn" class="p-2 text-gray-600 hover:text-blue-500 transition-colors">
-                    <svg id="mini-play-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5V5.5a.5.5 0 0 1 .271-.445z"/></svg>
-                    <svg id="mini-pause-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 hidden" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 4.5A.5.5 0 0 1 6 5v6a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5z"/></svg>
+        `;
+        document.getElementById('schedule-container').innerHTML = newHtml;
+    }
+
+    // Adds a new blank task to the edit form
+    function addTask() {
+        const tasksContainer = document.getElementById('edit-tasks-container');
+        const newIndex = tasksContainer.children.length;
+        const newTaskHtml = `
+            <div class="flex items-center gap-2">
+                <input type="text" value="" placeholder="Vaxt" data-task-index="${newIndex}" data-field="time" class="bg-gray-800">
+                <input type="text" value="" placeholder="Tapşırıq" data-task-index="${newIndex}" data-field="description" class="bg-gray-800 flex-grow">
+                <button class="action-btn delete-btn" onclick="deleteTask(${newIndex})">
+                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm-2-4h2V9H4v6zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+                    </svg>
                 </button>
             </div>
-        </div>
-    </div>
+        `;
+        tasksContainer.insertAdjacentHTML('beforeend', newTaskHtml);
+    }
     
-    <!-- Tam Ekran Müzik Çalar -->
-    <div id="full-screen-player" class="full-screen-player">
-        <div class="controls-container flex flex-col items-center">
-            <button id="close-player-btn" class="absolute top-4 left-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-gray-700" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/></svg>
-            </button>
-            <div class="w-full max-w-lg p-4 bg-white rounded-xl shadow-xl">
-                 <div class="flex items-center mb-4">
-                    <input type="text" id="music-search-input" placeholder="Müzik ara..." class="flex-grow px-4 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    <button id="search-music-btn" class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">Ara</button>
-                </div>
-                <img id="player-cover" src="https://placehold.co/300x300/a2d2ff/003366?text=MUBASIC" alt="Kapak" class="w-60 h-60 md:w-80 md:h-80 object-cover rounded-xl shadow-lg mb-6 mx-auto">
-                <h2 id="player-title" class="text-3xl font-bold text-center truncate">Şarkı Adı</h2>
-                <p id="player-artist" class="text-lg text-gray-600 text-center mb-6 truncate">Sanatçı Adı</p>
-                <input type="range" id="seek-bar" value="0" min="0" max="100" class="w-full">
-                <div class="flex justify-between text-sm text-gray-500 mt-2 w-full">
-                    <span id="current-time">0:00</span>
-                    <span id="duration">0:00</span>
-                </div>
-                <div class="flex items-center justify-center space-x-4 mt-6">
-                    <button id="rewind-10-btn" class="p-2 text-gray-600 hover:text-blue-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 16 16"><path d="M12.5 5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5zm-4 0a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5zm-4 0a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5z"/></svg>
-                    </button>
-                    <button id="prev-btn" class="p-2 text-gray-600 hover:text-blue-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 16 16"><path d="M6.717 5.762a.5.5 0 0 0-.583.492l.095 4.881a.5.5 0 0 0 .583.492.5.5 0 0 0 .492-.583l-.095-4.881a.5.5 0 0 0-.492-.583z"/><path d="M8 8a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-1 0v3.5a.5.5 0 0 0 .5.5z"/></svg>
-                    </button>
-                    <button id="full-screen-play-pause-btn" class="p-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors shadow-lg">
-                        <svg id="full-screen-play-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5V5.5a.5.5 0 0 1 .271-.445z"/></svg>
-                        <svg id="full-screen-pause-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 hidden" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 4.5A.5.5 0 0 1 6 5v6a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5zm5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5z"/></svg>
-                    </button>
-                    <button id="next-btn" class="p-2 text-gray-600 hover:text-blue-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8" viewBox="0 0 16 16"><path d="M9.283 5.762a.5.5 0 0 0-.583.492l.095 4.881a.5.5 0 0 0 .583.492.5.5 0 0 0 .492-.583l-.095-4.881a.5.5 0 0 0-.492-.583z"/><path d="M8 8a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-1 0v3.5a.5.5 0 0 0 .5.5z"/></svg>
-                    </button>
-                    <button id="fast-forward-10-btn" class="p-2 text-gray-600 hover:text-blue-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7" viewBox="0 0 16 16"><path d="M12.5 5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5zm-4 0a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5zm-4 0a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0v-5a.5.5 0 0 1 .5-.5z"/></svg>
-                    </button>
-                </div>
-            </div>
+    // Deletes a task from the edit form
+    function deleteTask(taskIndex) {
+        const taskElement = document.querySelector(`[data-task-index="${taskIndex}"]`).parentElement;
+        taskElement.remove();
+    }
 
-            <!-- AI tarafından önerilen şarkılar -->
-            <div id="ai-suggestions-container" class="mt-8 hidden w-full max-w-lg">
-                <h3 class="text-xl font-bold mb-4 text-gray-800">Benzer Şarkı Önerileri</h3>
-                <ul id="ai-suggestions-list" class="bg-white p-4 rounded-xl shadow-xl space-y-2">
-                    <!-- Öneriler buraya eklenecek -->
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- Alt Navigasyon Çubuğu -->
-    <nav class="fixed bottom-0 left-0 w-full bg-white shadow-2xl rounded-t-3xl p-4 hidden">
-        <div class="flex justify-around items-center max-w-xl mx-auto">
-            <button id="home-btn" class="flex flex-col items-center text-blue-600 focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7 mb-1" viewBox="0 0 16 16"><path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/></svg>
-                <span class="text-xs">Ana Sayfa</span>
-            </button>
-            <button id="search-btn" class="flex flex-col items-center text-gray-400 hover:text-blue-600 transition focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7 mb-1" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/></svg>
-                <span class="text-xs">Arama</span>
-            </button>
-            <button id="favorites-btn" class="flex flex-col items-center text-gray-400 hover:text-blue-600 transition focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7 mb-1" viewBox="0 0 16 16"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.837-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01z"/></svg>
-                <span class="text-xs">Favoriler</span>
-            </button>
-            <button id="admin-btn" class="flex flex-col items-center text-gray-400 hover:text-blue-600 transition focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-7 h-7 mb-1" viewBox="0 0 16 16"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg>
-                <span class="text-xs">Admin</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Modals and Toast Container -->
-    <div id="name-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center transition-opacity duration-300 ease-out opacity-0 hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-80"><h3 class="text-xl font-bold mb-4">Hoş Geldiniz!</h3><p class="text-sm text-gray-600 mb-4">Lütfen isminizi giriniz.</p><input type="text" id="user-name-input" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Adınız"><button id="save-name-btn" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-300">Kaydet</button></div>
-    </div>
-    <div id="admin-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center hidden transition-opacity duration-300 ease-out opacity-0">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-80"><h3 class="text-xl font-bold mb-4">Yönetici Girişi</h3><p class="text-sm text-gray-600 mb-4">Devam etmek için yönetici şifresini giriniz.</p><input type="password" id="admin-password" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Şifre"><button id="submit-password" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-300">Giriş Yap</button></div>
-    </div>
-    <div id="upload-info-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center transition-opacity duration-300 ease-out opacity-0 hidden">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-96">
-            <h3 class="text-xl font-bold mb-4">Müzik Ekle</h3>
-            <p class="text-sm text-gray-600 mb-4">Lütfen şarkının bilgilerini girin ve dosyayı sürükleyip bırakın.</p>
-            <input type="text" id="upload-title-input" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Şarkı Adı">
-            <input type="text" id="upload-artist-input" class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4" placeholder="Sanatçı Adı">
-            <div id="drop-zone" class="drop-zone mb-4 cursor-pointer">
-                <p>Dosyayı buraya sürükleyin</p>
-                <input type="file" id="upload-file-input" accept=".mp3,audio/*" class="hidden">
-            </div>
-            <button id="submit-upload-btn" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition duration-300">Yükle</button>
-        </div>
-    </div>
-    <div id="toast-container" class="fixed bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center z-50 space-y-2"></div>
-    
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot, collection, query, where, getDocs, updateDoc, addDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
-        
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        let db;
-        let auth;
-        let storage;
-        let userId;
-
-        const mainContent = document.getElementById('main-content');
-        const navBar = document.querySelector('nav');
-        const nameModal = document.getElementById('name-modal');
-        const userNameInput = document.getElementById('user-name-input');
-        const saveNameBtn = document.getElementById('save-name-btn');
-        const adminModal = document.getElementById('admin-modal');
-        const adminPasswordInput = document.getElementById('admin-password');
-        const submitPasswordBtn = document.getElementById('submit-password');
-        const miniPlayer = document.getElementById('mini-player');
-        const miniPlayerTitle = document.getElementById('mini-player-title');
-        const miniPlayerArtist = document.getElementById('mini-player-artist');
-        const miniPlayerCover = document.getElementById('mini-player-cover');
-        const miniPlayPauseBtn = document.getElementById('mini-play-pause-btn');
-        const miniPlayIcon = document.getElementById('mini-play-icon');
-        const miniPauseIcon = document.getElementById('mini-pause-icon');
-        const fullScreenPlayer = document.getElementById('full-screen-player');
-        const closePlayerBtn = document.getElementById('close-player-btn');
-        const playerCover = document.getElementById('player-cover');
-        const playerTitle = document.getElementById('player-title');
-        const playerArtist = document.getElementById('player-artist');
-        const fullScreenPlayPauseBtn = document.getElementById('full-screen-play-pause-btn');
-        const fullScreenPlayIcon = document.getElementById('full-screen-play-icon');
-        const fullScreenPauseIcon = document.getElementById('full-screen-pause-icon');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const rewind10Btn = document.getElementById('rewind-10-btn');
-        const fastForward10Btn = document.getElementById('fast-forward-10-btn');
-        const seekBar = document.getElementById('seek-bar');
-        const currentTimeSpan = document.getElementById('current-time');
-        const durationSpan = document.getElementById('duration');
-        const uploadInfoModal = document.getElementById('upload-info-modal');
-        const uploadTitleInput = document.getElementById('upload-title-input');
-        const uploadArtistInput = document.getElementById('upload-artist-input');
-        const uploadFileInput = document.getElementById('upload-file-input');
-        const submitUploadBtn = document.getElementById('submit-upload-btn');
-        const musicSearchInput = document.getElementById('music-search-input');
-        const searchMusicBtn = document.getElementById('search-music-btn');
-        const aiSuggestionsContainer = document.getElementById('ai-suggestions-container');
-        const aiSuggestionsList = document.getElementById('ai-suggestions-list');
-        const dropZone = document.getElementById('drop-zone');
-
-        const audio = new Audio();
-
-        const USERS_COLLECTION = `artifacts/${appId}/public/data/users`;
-        const MUSIC_COLLECTION = `artifacts/${appId}/public/data/music`;
-        const FAVORITES_COLLECTION = `artifacts/${appId}/users/${(typeof __initial_auth_token !== 'undefined' ? (JSON.parse(atob(__initial_auth_token.split('.')[1])).uid) : 'anonymous')}/favorites`;
-        const NAME_SAVED_KEY = 'mubariz_name_set';
-        
-        let musicList = [];
-        let favoritesList = [];
-        let currentTrackIndex = -1;
-        let isPlaying = false;
-        let isBlocked = false;
-        let isSeeking = false;
-        let uploadedFile = null;
-
-        const PLATFORMS_DATA = [
-            { id: 'mugpt', title: 'MUGPT', icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-12 h-12 mb-2 text-blue-600" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM5.5 4.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5zM8 7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4A.5.5 0 0 1 8 7z"/></svg>` },
-            { id: 'mubasic', title: 'MUBASIC', icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-12 h-12 mb-2 text-blue-600" viewBox="0 0 16 16"><path d="M12 13c0 .5-.5 1-1 1H5c-.5 0-1-.5-1-1v-4a.5.5 0 0 1 .5-.5H8a.5.5 0 0 1 .5-.5h3.5c.5 0 1 .5 1 1v4z"/><path d="M11 2.5a.5.5 0 0 0-.5-.5H5.5a.5.5 0 0 0-.5.5V5h7V2.5z"/><path d="M11.5 6.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM11.5 9a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zM11.5 11.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/><path d="M11 2.5a.5.5 0 0 1 .5-.5h-2a.5.5 0 0 1-.5.5V5h2V2.5z"/></svg>`},
-            { id: 'mubag_style', title: 'MUBAG_STYLE', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#3b82f6" class="w-12 h-12 mb-2" viewBox="0 0 24 24"><path d="M8.88 2.05L4.44 6.5C3.5 7.43 3 8.67 3 9.99V20c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V9.99c0-1.32-.5-2.56-1.44-3.5L15.12 2.05C14.15 1.1 12.87.5 11.5.5S8.85 1.1 7.88 2.05zM12 19.5c-2.48 0-4.5-2.02-4.5-4.5s2.02-4.5 4.5-4.5 4.5 2.02 4.5 4.5-2.02 4.5-4.5 4.5z"/></svg>`},
-            { id: 'about', title: 'Hakkımızda', icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-12 h-12 mb-2 text-blue-600" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293-.03-.399-.288-.469l-2.29-.287-.082-.38.45-.083a.5.5 0 1 1 .15-.992l-1.396-.465L5.5 5.068a1 1 0 0 1 .91-.321h.798c.452 0 .612-.224.5-.472a1 1 0 0 1 .45-.98l-.29-2.007a.5.5 0 0 1 .98-.15L8 3.195a1 1 0 0 1-.9.321h-.798c-.452 0-.612.224-.5.472a.5.5 0 0 1-.45.98l.29 2.007a.5.5 0 0 1-.98-.15z"/></svg>` },
-        ];
-
-        const MUGPT_CHAT_HTML = `<div class="flex flex-col h-full w-full max-w-2xl bg-white rounded-xl shadow-xl p-4"><div class="flex items-center justify-between mb-4"><button id="back-to-home-btn" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-gray-600" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/></svg></button><h1 class="text-3xl font-bold text-gray-800">MUGPT</h1><div></div></div><div id="chat-area" class="chat-area flex-grow overflow-y-auto mb-4 p-4 space-y-4"><div class="message ai-message">Merhaba, ben MUGPT. Sorularınızı yanıtlamaya hazırım.</div></div><div class="flex items-center"><input type="text" id="chat-input" class="flex-grow px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Bir şeyler yazın..."><button id="send-button" class="ml-2 p-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 focus:outline-none"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.5.5 0 0 1-.921.073l-2.755-6.353-6.353-2.755a.5.5 0 0 1 .073-.921z"/></svg></button></div></div>`;
-        const MUBASIC_PAGE_HTML = `<div class="w-full max-w-4xl relative p-4"><button id="back-to-home-btn" class="absolute top-0 left-0 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors duration-200 z-10"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-gray-600" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/></svg></button><h1 class="text-4xl md:text-5xl font-bold mb-8 text-blue-600 text-center">MUBASIC</h1><div class="bg-blue-100 p-6 rounded-2xl shadow-xl border-2 border-blue-200"><h3 class="text-2xl font-semibold mb-4 text-blue-700">Müzik Listesi</h3><ul id="music-list" class="space-y-4"><!-- Müzikler buraya dinamik olarak eklenecek --></ul></div></div>`;
-        const FAVORITES_PAGE_HTML = `<div class="w-full max-w-4xl relative p-4"><button id="back-to-home-btn" class="absolute top-0 left-0 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors duration-200 z-10"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-gray-600" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/></svg></button><h1 class="text-4xl md:text-5xl font-bold mb-8 text-pink-600 text-center">Favorilerim</h1><div class="bg-pink-100 p-6 rounded-2xl shadow-xl border-2 border-pink-200"><h3 class="text-2xl font-semibold mb-4 text-pink-700">Favori Müzikleriniz</h3><ul id="favorites-list" class="space-y-4"><!-- Favori müzikler buraya eklenecek --></ul></div></div>`;
-        const ABOUT_PAGE_HTML = `<div class="w-full max-w-4xl relative"><button id="back-to-home-btn" class="absolute top-4 left-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-gray-600" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/></svg></button><h1 class="text-4xl md:text-5xl font-bold mb-8 text-gray-800 text-center">Hakkımızda</h1><div class="bg-white p-6 rounded-2xl shadow-xl text-left"><h2 class="text-2xl font-semibold mb-4 text-blue-600">Platformumuzun Amacı</h2><p class="text-lg text-gray-700 mb-6">**MUBARIZ**, kullanıcıların kendi içeriklerini oluşturabilecekleri, paylaşabilecekleri ve birlikte tüketebilecekleri **kendi ekosistemlerini kurmalarına olanak tanıyan** bir platformdur. Amacımız, sadece içerik sunmak değil, aynı zamanda kullanıcıların bu içeriği ortaklaşa yönetmelerini ve şekillendirmelerini sağlamaktır. Geleneksel platformlarda sadece pasif bir tüketiciyken, MUBARIZ'de bir parçası olduğunuz topluluğun aktif bir yöneticisi ve içerik üreticisi olursunuz.</p><h2 class="text-2xl font-semibold mb-4 text-blue-600">Benzersiz Özellikler</h2><ul class="list-disc list-inside space-y-3 text-lg text-gray-700 mb-6"><li>**Kullanıcı Merkezli İçerik Yönetimi:** Siz ve diğer kullanıcılar, platformdaki video ve müzik gibi içerikleri birlikte ekleyebilir ve düzenleyebilirsiniz. Hangi içeriğin platformda kalacağına topluluk olarak karar verirsiniz.</li><li>**Topluluk Oluşturma:** Platform, herkesin katılabileceği ve birlikte içerik yönetebileceği, özel bir hesap sistemi olmadan çalışır. Bu sayede, arkadaşlarınızla veya diğer kullanıcılarla kolayca ortak bir platformda buluşabilirsiniz.</li><li>**Güvenli ve Pratik Deneyim:** YouTube gibi harici platformların gücünü kullanarak, video izleme deneyimini güvenli bir şekilde sunarız. Böylece, hem içerik kalitesinden ödün vermezsiniz hem de kişisel bilgilerinizi riske atmazsınız.</li><li>**Çevrimdışı ve Kesintisiz Müzik:** MUBASIC sayesinde, eklenen müzikleri internet bağlantısı olmadan dinleyebilir, arka planda sorunsuz bir şekilde oynatabilirsiniz. Reklamsız ve kesintisiz bir müzik deneyimi için tasarlandı.</li></ul><h2 class="text-2xl font-semibold mb-4 text-blue-600">MUBARIZ Neden Farklı?</h2><p class="text-lg text-gray-700">Diğer sosyal medya veya içerik platformlarının aksine, MUBARIZ'de kişisel hesaplar veya karmaşık algoritmalara dayalı öneri sistemleri yoktur. Herkesin eşit söz hakkına sahip olduğu, gerçek anlamda **demokratik bir içerik kütüphanesi** oluşturmayı hedefleriz. Sizin ve arkadaşlarınızın zevkine göre şekillenen, dış etkilerden bağımsız bir dijital yaşam alanı sunar. Reklamlar ve veri takibi olmadan, saf bir içerik paylaşımı ve tüketimi deneyimi yaşarsınız.</p></div></div>`;
-        const ADMIN_PAGE_HTML = (userCount, users) => {
-            const userListHtml = users.map(user => `<li class="flex items-center justify-between p-4 bg-white rounded-xl shadow-md"><span class="font-semibold text-gray-800">${user.name}</span><button class="toggle-block-btn bg-red-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-red-600 transition" data-user-id="${user.id}" data-is-blocked="${user.isBlocked}">${user.isBlocked ? 'Engeli Kaldır' : 'Engelle'}</button></li>`).join('');
-            return `<div class="flex flex-col items-center w-full max-w-2xl"><h1 class="text-4xl md:text-5xl font-bold mb-4 text-green-700">Yönetici Paneli</h1><p class="text-lg md:text-xl text-gray-600 mb-8 text-center">Toplam Kullanıcı: ${userCount}</p><div class="w-full space-y-4"><div class="bg-gray-100 p-4 rounded-xl shadow-md"><p class="font-semibold text-lg mb-2">Kullanıcı Yönetimi</p><ul id="user-list" class="space-y-2">${userListHtml}</ul></div></div><button id="add-music-btn" class="mt-8 bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition duration-300">Müzik Ekle</button></div>`;
-        };
-        const BLOCKED_PAGE_HTML = `<div class="flex flex-col items-center w-full max-w-2xl"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-24 h-24 text-red-500 mb-4" viewBox="0 0 16 16"><path d="M1.5 13a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2a.5.5 0 0 0-.5.5V13zM1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V3z"/><path d="M11 9.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/><path d="M13 13H3a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5zm-10-1a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5H3.5a.5.5 0 0 0-.5.5v7.5a.5.5 0 0 0 .5.5z"/></svg><h1 class="text-4xl md:text-5xl font-bold mb-4 text-red-600">Erişim Engellendi</h1><p class="text-lg md:text-xl text-gray-600 text-center">Hesabınız yönetici tarafından engellenmiştir.</p></div>`;
-        const HOME_PAGE_HTML = createPlatformsHTML(PLATFORMS_DATA);
-        const SEARCH_PAGE_HTML = `<div class="flex flex-col items-center w-full max-w-2xl"><h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-800">Arama</h1><input type="text" id="search-input" placeholder="Platform ara..." class="w-full px-5 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6 shadow-md" /><div id="search-results" class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 text-left"></div></div>`;
-        
-        function createPlatformsHTML(platforms) {
-            const platformCards = platforms.map(p => `<div data-platform-id="${p.id}" class="bg-white p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-transform transform hover:scale-105 duration-300 flex flex-col items-center justify-center aspect-square cursor-pointer">${p.icon}<h2 class="text-lg font-semibold text-center">${p.title}</h2></div>`).join('');
-            return `<div class="w-full max-w-4xl text-center"><h1 class="text-4xl md:text-5xl font-bold mb-8 text-gray-800">Platformlar</h1><div id="platform-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">${platformCards}</div></div>`;
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            const formattedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-            return `${minutes}:${formattedSeconds}`;
-        }
-        
-        function createToast(message, isError = false) {
-            const toastContainer = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-xl shadow-lg text-white font-semibold transform transition-all duration-300 ease-out translate-y-full opacity-0 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
-            toast.textContent = message;
-            toastContainer.appendChild(toast);
-            setTimeout(() => {
-                toast.classList.remove('translate-y-full', 'opacity-0');
-                toast.classList.add('translate-y-0', 'opacity-100');
-            }, 10);
-            setTimeout(() => {
-                toast.classList.remove('opacity-100');
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        function changeContent(htmlContent, activeBtnId, onRenderCallback = null) {
-            mainContent.innerHTML = htmlContent;
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('text-blue-600', 'text-pink-600');
-                btn.classList.add('text-gray-400');
-            });
-            const activeBtn = document.getElementById(activeBtnId);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-gray-400');
-                if (activeBtnId === 'favorites-btn') {
-                    activeBtn.classList.add('text-pink-600');
-                } else {
-                    activeBtn.classList.add('text-blue-600');
-                }
-            }
-            if (onRenderCallback) {
-                onRenderCallback();
-            }
-        }
-        
-        function loadPlatform(platformId) {
-            if (platformId === 'mugpt') {
-                changeContent(MUGPT_CHAT_HTML, 'home-btn', setupMUGPTChat);
-            } else if (platformId === 'about') {
-                changeContent(ABOUT_PAGE_HTML, 'home-btn', () => {
-                    document.getElementById('back-to-home-btn').addEventListener('click', () => {
-                        changeContent(HOME_PAGE_HTML, 'home-btn', attachPlatformEventListeners);
-                    });
-                });
-            } else if (platformId === 'mubasic') {
-                changeContent(MUBASIC_PAGE_HTML, 'home-btn', setupMUBASICPage);
-            } else if (platformId === 'mubag_style') {
-                window.open('https://logocraft.github.io/Mubag_stylee/', '_blank');
-            }
-        }
-
-        function attachPlatformEventListeners() {
-            const grid = document.getElementById('platform-grid');
-            if (grid) {
-                grid.addEventListener('click', (e) => {
-                    const card = e.target.closest('[data-platform-id]');
-                    if (card) {
-                        const platformId = card.dataset.platformId;
-                        loadPlatform(platformId);
-                    }
+    // Saves the schedule changes
+    function saveScheduleChanges(dayIndex) {
+        const tasksContainer = document.getElementById('edit-tasks-container');
+        const newTasks = [];
+        tasksContainer.querySelectorAll('div').forEach(taskElement => {
+            const timeInput = taskElement.querySelector('input[data-field="time"]');
+            const descInput = taskElement.querySelector('input[data-field="description"]');
+            if (timeInput.value && descInput.value) {
+                newTasks.push({
+                    time: timeInput.value,
+                    description: descInput.value
                 });
             }
+        });
+        schedule[dayIndex].tasks = newTasks;
+        renderSchedule();
+        showNotification('Rutin uğurla yeniləndi!', 'green');
+    }
+
+    // Cancels the schedule edit and reverts to the default view
+    function cancelScheduleEdit() {
+        renderSchedule();
+    }
+
+    // Balı dəyərləndirən funksiya
+    function getPerformanceIndicator(score) {
+        if (score >= 80) {
+            return { icon: '⭐', color: 'bg-green-800' };
+        } else if (score >= 50) {
+            return { icon: '👍', color: 'bg-yellow-800' };
+        } else {
+            return { icon: '👇', color: 'bg-red-800' };
         }
-        
-        async function handleSearch() {
-            const searchInput = document.getElementById('search-input');
-            const searchResultsContainer = document.getElementById('search-results');
-            if (searchInput && searchResultsContainer) {
-                const query = searchInput.value.toLowerCase();
-                const filteredPlatforms = PLATFORMS_DATA.filter(p => p.title.toLowerCase().includes(query));
-                searchResultsContainer.innerHTML = createPlatformsHTML(filteredPlatforms);
-                attachPlatformEventListeners(); 
-            }
+    }
+
+    // Nəticə siyahısını yenidən render edir
+    function renderResults() {
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.innerHTML = ''; // Köhnə nəticələri təmizlə
+
+        if (results.length === 0) {
+            resultsContainer.innerHTML = '<p class="text-center text-gray-400">Heç bir nəticə qeyd edilməyib.</p>';
+            return;
         }
 
-        async function saveUserName(name) {
-            try {
-                const userDocRef = doc(db, USERS_COLLECTION, userId);
-                await setDoc(userDocRef, { name: name, isBlocked: false });
-                sessionStorage.setItem(NAME_SAVED_KEY, 'true');
-                return true;
-            } catch (error) {
-                console.error("Kullanıcı adı kaydedilirken hata oluştu: ", error);
-                return false;
-            }
-        }
+        results.forEach(result => {
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
 
-        async function handleBlocking(e) {
-            if (!db) return;
-            const target = e.target;
-            const userIdToBlock = target.dataset.userId;
-            const isBlocked = target.dataset.isBlocked === 'true';
-            if (userIdToBlock) {
-                const userDocRef = doc(db, USERS_COLLECTION, userIdToBlock);
-                await updateDoc(userDocRef, { isBlocked: !isBlocked });
-            }
-        }
-
-        async function renderAdminPanel() {
-            const users = [];
-            const usersSnapshot = await getDocs(collection(db, USERS_COLLECTION));
-            usersSnapshot.forEach(doc => {
-                const data = doc.data();
-                users.push({ id: doc.id, name: data.name, isBlocked: data.isBlocked });
-            });
-            changeContent(ADMIN_PAGE_HTML(users.length, users), 'admin-btn', () => {
-                const userList = document.getElementById('user-list');
-                if (userList) {
-                    userList.addEventListener('click', (e) => {
-                        if (e.target.classList.contains('toggle-block-btn')) {
-                            handleBlocking(e);
-                        }
-                    });
-                }
-                document.getElementById('add-music-btn').addEventListener('click', () => {
-                     uploadInfoModal.classList.remove('hidden');
-                     setTimeout(() => uploadInfoModal.classList.add('opacity-100'), 10);
-                });
-            });
-        }
-        
-        function renderAppContent() {
-            if (isBlocked) {
-                changeContent(BLOCKED_PAGE_HTML, '');
-                navBar.classList.add('hidden');
-            } else {
-                if (sessionStorage.getItem(NAME_SAVED_KEY) === 'true') {
-                    changeContent(HOME_PAGE_HTML, 'home-btn', attachPlatformEventListeners);
-                    navBar.classList.remove('hidden');
-                } else {
-                    nameModal.classList.remove('hidden');
-                    setTimeout(() => nameModal.classList.add('opacity-100'), 10);
-                }
-            }
-        }
-
-        function setupMUGPTChat() {
-            const chatArea = document.getElementById('chat-area');
-            const chatInput = document.getElementById('chat-input');
-            const sendButton = document.getElementById('send-button');
-            const backBtn = document.getElementById('back-to-home-btn');
-            backBtn.addEventListener('click', () => { changeContent(HOME_PAGE_HTML, 'home-btn', attachPlatformEventListeners); });
-            function addMessage(text, sender) {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
-                messageDiv.textContent = text;
-                chatArea.appendChild(messageDiv);
-                chatArea.scrollTop = chatArea.scrollHeight;
-            }
-            async function sendMessage() {
-                const userMessage = chatInput.value.trim();
-                if (userMessage === '') return;
-                addMessage(userMessage, 'user');
-                chatInput.value = '';
-                sendButton.disabled = true;
-                const loadingMessage = document.createElement('div');
-                loadingMessage.id = 'loading-message';
-                loadingMessage.classList.add('message', 'ai-message');
-                loadingMessage.textContent = 'Yapay zeka yanıt oluşturuyor...';
-                chatArea.appendChild(loadingMessage);
-                chatArea.scrollTop = chatArea.scrollHeight;
-                try {
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=`;
-                    const payload = { contents: [{ parts: [{ text: userMessage }] }] };
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    const result = await response.json();
-                    const aiResponse = result.candidates[0].content.parts[0].text;
-                    loadingMessage.remove();
-                    addMessage(aiResponse, 'ai');
-                } catch (error) {
-                    console.error("Yapay zeka yanıtı alınamadı:", error);
-                    loadingMessage.remove();
-                    addMessage("Üzgünüm, şu anda yanıt veremiyorum. Lütfen daha sonra tekrar deneyin.", 'ai');
-                } finally {
-                    sendButton.disabled = false;
-                    chatInput.focus();
-                }
-            }
-            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { sendMessage(); } });
-            sendButton.addEventListener('click', sendMessage);
-            chatInput.focus();
-        }
-
-        function setupMUBASICPage() {
-            const backBtn = document.getElementById('back-to-home-btn');
-            const musicListElement = document.getElementById('music-list');
-            backBtn.addEventListener('click', () => { changeContent(HOME_PAGE_HTML, 'home-btn', attachPlatformEventListeners); });
+            let resultHTML = `<h3>${result.date} sınaq nəticələri</h3>`;
             
-            const musicListUnsubscribe = onSnapshot(collection(db, MUSIC_COLLECTION), (snapshot) => {
-                musicList = snapshot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
-                renderMusicList(musicListElement, musicList);
-            });
-        }
-        
-        function renderMusicList(element, list) {
-            if (!element) return;
-            element.innerHTML = '';
-            list.forEach(music => {
-                const isLiked = favoritesList.includes(music.docId);
-                const li = document.createElement('li');
-                li.className = "bg-white p-4 rounded-xl shadow-md flex items-center justify-between border border-blue-300 cursor-pointer transition-colors hover:bg-blue-50";
-                li.setAttribute('data-doc-id', music.docId);
-                li.innerHTML = `
-                    <div class="flex items-center space-x-4 flex-grow overflow-hidden">
-                        <img src="${music.coverUrl || 'https://placehold.co/60x60/a2d2ff/003366?text=MUBASIC'}" alt="Kapak" class="w-12 h-12 rounded-lg object-cover">
-                        <div class="truncate">
-                            <h4 class="font-bold text-base text-blue-800 truncate">${music.title}</h4>
-                            <p class="text-sm text-blue-500 truncate">${music.artist}</p>
-                        </div>
-                    </div>
-                    <button class="like-btn p-2 rounded-full hover:bg-gray-200 transition-colors" data-doc-id="${music.docId}">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="${isLiked ? 'red' : 'none'}" stroke="currentColor" stroke-width="2" class="w-6 h-6 text-red-500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.4 5.4 0 0 1 8.5 3c1.74 0 3.41.81 4.5 2.09A5.4 5.4 0 0 1 15.5 3c3.04 0 5.5 2.46 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </button>
-                `;
-                element.appendChild(li);
-            });
-            element.querySelectorAll('li').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    if (e.target.closest('.like-btn')) {
-                        handleLike(e.target.closest('.like-btn').dataset.docId);
-                    } else {
-                        const docId = item.dataset.docId;
-                        const track = musicList.find(m => m.docId === docId);
-                        if (track && track.fileUrl) {
-                            currentTrackIndex = musicList.findIndex(m => m.docId === docId);
-                            playTrack(track);
-                        } else {
-                            createToast("Bu müzik için bir ses dosyası bulunamadı.", true);
-                        }
-                    }
-                });
-            });
-        }
-        
-        async function handleLike(docId) {
-            const favoritesRef = doc(db, FAVORITES_COLLECTION, 'list');
-            const favoritesSnap = await getDoc(favoritesRef);
-            if (!favoritesSnap.exists()) {
-                await setDoc(favoritesRef, { songs: [] });
+            if (result.fizika) {
+                const { icon, color } = getPerformanceIndicator(result.fizika);
+                resultHTML += `<p><strong>Fizika:</strong> ${result.fizika} bal <span class="score-icon">${icon}</span></p>`;
+                resultItem.classList.add(color);
             }
-            if (favoritesList.includes(docId)) {
-                await updateDoc(favoritesRef, { songs: arrayRemove(docId) });
-                createToast("Favorilerden kaldırıldı.", false);
-            } else {
-                await updateDoc(favoritesRef, { songs: arrayUnion(docId) });
-                createToast("Favorilere eklendi!", false);
+            if (result.informatika) {
+                const { icon, color } = getPerformanceIndicator(result.informatika);
+                resultHTML += `<p><strong>İnformatika:</strong> ${result.informatika} bal <span class="score-icon">${icon}</span></p>`;
+                resultItem.classList.add(color);
             }
-        }
-
-        function playTrack(track) {
-            if (audio.src === track.fileUrl && isPlaying) {
-                togglePlayPause(true);
-            } else {
-                audio.src = track.fileUrl;
-                audio.play();
-                isPlaying = true;
-                updatePlayerUI(track);
-                showFullScreenPlayer();
-            }
-        }
-        
-        function togglePlayPause(fromMiniPlayer = false) {
-            if (audio.paused) {
-                audio.play();
-                isPlaying = true;
-            } else {
-                audio.pause();
-                isPlaying = false;
-            }
-            updatePlayerUI(musicList[currentTrackIndex]);
-            if (fromMiniPlayer) {
-                showFullScreenPlayer();
-            }
-        }
-
-        function showFullScreenPlayer() {
-            fullScreenPlayer.classList.add('active');
-        }
-
-        function hideFullScreenPlayer() {
-            fullScreenPlayer.classList.remove('active');
-        }
-        
-        function playNextTrack() {
-            if (musicList.length === 0) return;
-            currentTrackIndex = (currentTrackIndex + 1) % musicList.length;
-            playTrack(musicList[currentTrackIndex]);
-        }
-        
-        function playPreviousTrack() {
-            if (musicList.length === 0) return;
-            currentTrackIndex = (currentTrackIndex - 1 + musicList.length) % musicList.length;
-            playTrack(musicList[currentTrackIndex]);
-        }
-        
-        function updatePlayerUI(track = null) {
-            if (track) {
-                miniPlayerTitle.textContent = track.title;
-                miniPlayerArtist.textContent = track.artist;
-                miniPlayerCover.src = track.coverUrl;
-                playerTitle.textContent = track.title;
-                playerArtist.textContent = track.artist;
-                playerCover.src = track.coverUrl;
-                miniPlayer.classList.remove('hidden');
-            } else {
-                 miniPlayerTitle.textContent = 'Şarkı Adı';
-                 miniPlayerArtist.textContent = 'Sanatçı Adı';
-                 miniPlayerCover.src = 'https://placehold.co/60x60/a2d2ff/003366?text=MUBASIC';
-                 playerTitle.textContent = 'Şarkı Adı';
-                 playerArtist.textContent = 'Sanatçı Adı';
-                 playerCover.src = 'https://placehold.co/300x300/a2d2ff/003366?text=MUBASIC';
-                 currentTrackIndex = -1;
-                 miniPlayer.classList.add('hidden');
-                 hideFullScreenPlayer();
+            if (result.riyaziyyat) {
+                const { icon, color } = getPerformanceIndicator(result.riyaziyyat);
+                resultHTML += `<p><strong>Riyaziyyat:</strong> ${result.riyaziyyat} bal <span class="score-icon">${icon}</span></p>`;
+                resultItem.classList.add(color);
             }
             
-            if (isPlaying) {
-                miniPlayIcon.classList.add('hidden');
-                miniPauseIcon.classList.remove('hidden');
-                fullScreenPlayIcon.classList.add('hidden');
-                fullScreenPauseIcon.classList.remove('hidden');
-            } else {
-                miniPlayIcon.classList.remove('hidden');
-                miniPauseIcon.classList.add('hidden');
-                fullScreenPlayIcon.classList.remove('hidden');
-                fullScreenPauseIcon.classList.add('hidden');
-            }
-        }
-        
-        function updateProgress() {
-            if (isSeeking) return;
-            if (audio.duration) {
-                const progress = (audio.currentTime / audio.duration) * 100;
-                seekBar.value = progress;
-                currentTimeSpan.textContent = formatTime(audio.currentTime);
-                durationSpan.textContent = formatTime(audio.duration);
-            }
-        }
+            if (result.comment) resultHTML += `<p><strong>Şərh:</strong> ${result.comment}</p>`;
 
-        async function getMusicSuggestions(query) {
-            aiSuggestionsList.innerHTML = `<li class="p-4 rounded-xl text-gray-500">Öneriler aranıyor...</li>`;
-            aiSuggestionsContainer.classList.remove('hidden');
-            try {
-                const prompt = `Şarkı adı: "${query}". Bu şarkıya benzer, aynı tarzda veya sanatçıya yakın 5 farklı şarkı öner. Önerilerini sadece bir JSON array olarak, her şarkı için "title" ve "artist" anahtarlarını kullanarak döndür. Başka bir metin ekleme.`;
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=`;
-                const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "ARRAY",
-                            items: {
-                                type: "OBJECT",
-                                properties: {
-                                    "title": { "type": "STRING" },
-                                    "artist": { "type": "STRING" }
-                                }
-                            }
-                        }
-                    }
+            // Düymələri əlavə et
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'item-actions';
+            
+            // Edit button
+            const editBtn = document.createElement('button');
+            editBtn.className = 'action-btn edit-btn';
+            editBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.06 9.06L15.94 10.94L18.41 8.47L16.53 6.59L14.06 9.06zM20.65 4.35C20.26 3.96 19.63 3.96 19.24 4.35L17.7 5.89L20.65 8.84L22.19 7.3C22.58 6.91 22.58 6.28 22.19 5.89L20.65 4.35zM12 18.01H2V20.01H12V18.01zM11.91 14.73L6.96 19.68C6.67 19.97 6.2 20.08 5.81 19.96L2.61 19.16C2.22 19.04 2.03 18.59 2.19 18.2L5.43 11.83L11.91 14.73z"/>
+                </svg>
+            `;
+            editBtn.onclick = () => editTestResult(result.id);
+            actionsDiv.appendChild(editBtn);
+
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'action-btn delete-btn';
+            deleteBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm-2-4h2V9H4v6zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z"/>
+                </svg>
+            `;
+            deleteBtn.onclick = () => deleteTestResult(result.id);
+            actionsDiv.appendChild(deleteBtn);
+
+            resultItem.innerHTML = resultHTML;
+            resultItem.appendChild(actionsDiv);
+            resultsContainer.appendChild(resultItem);
+        });
+    }
+
+    // Yeni nəticə əlavə et
+    function addTestResult() {
+        const dateInput = document.getElementById('test-date');
+        const fizikaScoreInput = document.getElementById('fizika-score');
+        const informatikaScoreInput = document.getElementById('informatika-score');
+        const riyaziyyatScoreInput = document.getElementById('riyaziyyat-score');
+        const commentInput = document.getElementById('comment');
+
+        const date = dateInput.value;
+        const fizika = parseInt(fizikaScoreInput.value) || null;
+        const informatika = parseInt(informatikaScoreInput.value) || null;
+        const riyaziyyat = parseInt(riyaziyyatScoreInput.value) || null;
+        const comment = commentInput.value;
+
+        if (date && (fizika || informatika || riyaziyyat)) {
+            const newResult = {
+                id: Date.now(),
+                date,
+                fizika,
+                informatika,
+                riyaziyyat,
+                comment
+            };
+            results.unshift(newResult);
+            renderResults();
+            clearInputs();
+        } else {
+            showNotification('Zəhmət olmasa, tarixi və ən az bir fən üzrə balı daxil edin.', 'red');
+        }
+    }
+
+    // Nəticəni sil
+    function deleteTestResult(id) {
+        if (confirm('Bu nəticəni silmək istədiyinizə əminsiniz?')) {
+            results = results.filter(result => result.id !== id);
+            renderResults();
+            clearInputs();
+            if (editingId === id) {
+                exitEditMode();
+            }
+        }
+    }
+
+    // Nəticəni redaktə etmək üçün məlumatları yüklə
+    function editTestResult(id) {
+        const resultToEdit = results.find(result => result.id === id);
+        if (resultToEdit) {
+            editingId = id;
+            document.getElementById('test-date').value = resultToEdit.date;
+            document.getElementById('fizika-score').value = resultToEdit.fizika || '';
+            document.getElementById('informatika-score').value = resultToEdit.informatika || '';
+            document.getElementById('riyaziyyat-score').value = resultToEdit.riyaziyyat || '';
+            document.getElementById('comment').value = resultToEdit.comment || '';
+            
+            enterEditMode();
+        }
+    }
+
+    // Dəyişiklikləri yadda saxla
+    function saveTestResult() {
+        const dateInput = document.getElementById('test-date');
+        const fizikaScoreInput = document.getElementById('fizika-score');
+        const informatikaScoreInput = document.getElementById('informatika-score');
+        const riyaziyyatScoreInput = document = document.getElementById('riyaziyyat-score');
+        const commentInput = document.getElementById('comment');
+
+        const date = dateInput.value;
+        const fizika = parseInt(fizikaScoreInput.value) || null;
+        const informatika = parseInt(informatikaScoreInput.value) || null;
+        const riyaziyyat = parseInt(riyaziyyatScoreInput.value) || null;
+        const comment = commentInput.value;
+
+        if (date && (fizika || informatika || riyaziyyat)) {
+            const index = results.findIndex(result => result.id === editingId);
+            if (index !== -1) {
+                results[index] = {
+                    ...results[index],
+                    date,
+                    fizika,
+                    informatika,
+                    riyaziyyat,
+                    comment
                 };
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (!response.ok) throw new Error(`API hatası: ${response.status}`);
-                const result = await response.json();
-                const suggestions = JSON.parse(result.candidates[0].content.parts[0].text);
-                renderSuggestions(suggestions);
-            } catch (error) {
-                console.error("Öneri alınırken hata oluştu:", error);
-                aiSuggestionsList.innerHTML = `<li class="p-4 rounded-xl text-red-500">Öneriler alınamadı. Lütfen tekrar deneyin.</li>`;
+                renderResults();
+                exitEditMode();
+                showNotification('Nəticə uğurla yeniləndi!', 'green');
             }
+        } else {
+            showNotification('Zəhmət olmasa, tarixi və ən az bir fən üzrə balı daxil edin.', 'red');
         }
+    }
 
-        function renderSuggestions(suggestions) {
-            aiSuggestionsList.innerHTML = '';
-            if (suggestions.length === 0) {
-                 aiSuggestionsList.innerHTML = `<li class="p-4 rounded-xl text-gray-500">Öneri bulunamadı.</li>`;
-            } else {
-                suggestions.forEach(s => {
-                    const li = document.createElement('li');
-                    li.className = "bg-gray-50 p-3 rounded-xl shadow-sm";
-                    li.innerHTML = `
-                        <h4 class="font-semibold text-gray-800">${s.title}</h4>
-                        <p class="text-sm text-gray-600">${s.artist}</p>
-                    `;
-                    aiSuggestionsList.appendChild(li);
-                });
-            }
-        }
+    // Redaktə rejimini aktivləşdirir
+    function enterEditMode() {
+        document.getElementById('add-btn').classList.add('hidden');
+        document.getElementById('save-btn').classList.remove('hidden');
+    }
 
-        window.onload = function() {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            auth = getAuth(app);
-            storage = getStorage(app);
-            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-            
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    const userDocRef = doc(db, USERS_COLLECTION, userId);
-                    onSnapshot(userDocRef, (docSnap) => {
-                        isBlocked = docSnap.exists() && docSnap.data().isBlocked;
-                        renderAppContent();
-                    });
-                    const favoritesRef = doc(db, FAVORITES_COLLECTION, 'list');
-                    onSnapshot(favoritesRef, (docSnap) => {
-                        favoritesList = docSnap.exists() ? docSnap.data().songs : [];
-                        const currentListElement = document.getElementById('music-list');
-                        if (currentListElement) {
-                            renderMusicList(currentListElement, musicList);
-                        }
-                        const favoritesListElement = document.getElementById('favorites-list');
-                        if (favoritesListElement) {
-                            renderMusicList(favoritesListElement, musicList.filter(m => favoritesList.includes(m.docId)));
-                        }
-                    });
-                } else {
-                    try {
-                        if (initialAuthToken) {
-                            await signInWithCustomToken(auth, initialAuthToken);
-                        } else {
-                            await signInAnonymously(auth);
-                        }
-                    } catch (error) {
-                        console.error("Gizli oturum açma hatası: ", error);
-                        createToast("Başlangıç hatası. Lütfen sayfayı yenileyin.", true);
-                    }
-                }
-            });
-            
-            miniPlayer.addEventListener('click', showFullScreenPlayer);
-            closePlayerBtn.addEventListener('click', hideFullScreenPlayer);
-            miniPlayPauseBtn.addEventListener('click', () => togglePlayPause(true));
-            fullScreenPlayPauseBtn.addEventListener('click', () => togglePlayPause(false));
-            prevBtn.addEventListener('click', playPreviousTrack);
-            nextBtn.addEventListener('click', playNextTrack);
-            rewind10Btn.addEventListener('click', () => audio.currentTime -= 10);
-            fastForward10Btn.addEventListener('click', () => audio.currentTime += 10);
-            audio.addEventListener('timeupdate', updateProgress);
-            audio.addEventListener('ended', playNextTrack);
-            seekBar.addEventListener('mousedown', () => isSeeking = true);
-            seekBar.addEventListener('mouseup', () => isSeeking = false);
-            seekBar.addEventListener('input', () => {
-                const seekTime = (seekBar.value / 100) * audio.duration;
-                audio.currentTime = seekTime;
-            });
-            musicSearchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    getMusicSuggestions(musicSearchInput.value);
-                }
-            });
-            searchMusicBtn.addEventListener('click', () => getMusicSuggestions(musicSearchInput.value));
-            
-            // Drag and Drop Logic
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, preventDefaults, false);
-            });
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
-            });
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
-            });
-            dropZone.addEventListener('drop', handleDrop, false);
-            dropZone.addEventListener('click', () => uploadFileInput.click());
-            uploadFileInput.addEventListener('change', (e) => handleFileSelect(e.target.files));
+    // Redaktə rejimindən çıxır
+    function exitEditMode() {
+        editingId = null;
+        clearInputs();
+        document.getElementById('add-btn').classList.remove('hidden');
+        document.getElementById('save-btn').classList.add('hidden');
+    }
 
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
+    // Giriş sahələrini təmizlə
+    function clearInputs() {
+        document.getElementById('test-date').value = '';
+        document.getElementById('fizika-score').value = '';
+        document.getElementById('informatika-score').value = '';
+        document.getElementById('riyaziyyat-score').value = '';
+        document.getElementById('comment').value = '';
+    }
 
-            function handleDrop(e) {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                handleFileSelect(files);
-            }
+    // Bildiriş mesajını göstər
+    function showNotification(message, color) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.color = color;
+        notification.style.marginTop = '1rem';
+        notification.style.textAlign = 'center';
+        
+        const resultsContainer = document.getElementById('results-container');
+        resultsContainer.prepend(notification);
 
-            function handleFileSelect(files) {
-                if (files.length > 0) {
-                    const file = files[0];
-                    if (file.type.startsWith('audio/')) {
-                        uploadedFile = file;
-                        dropZone.querySelector('p').textContent = `${file.name} seçildi.`;
-                    } else {
-                        createToast("Lütfen geçerli bir ses dosyası seçin.", true);
-                    }
-                }
-            }
-            
-            submitUploadBtn.addEventListener('click', async () => {
-                const title = uploadTitleInput.value.trim();
-                const artist = uploadArtistInput.value.trim();
-                if (!title || !artist || !uploadedFile) {
-                    createToast("Lütfen tüm alanları doldurun ve bir dosya seçin.", true);
-                    return;
-                }
-                uploadInfoModal.classList.remove('opacity-100');
-                setTimeout(() => uploadInfoModal.classList.add('hidden'), 300);
-                
-                try {
-                    const musicRef = ref(storage, `music_files/${uploadedFile.name}`);
-                    const uploadTask = uploadBytes(musicRef, uploadedFile);
-                    await uploadTask;
-                    const musicFileUrl = await getDownloadURL(musicRef);
-                    const musicDoc = { title: title, artist: artist, fileUrl: musicFileUrl, coverUrl: 'https://placehold.co/60x60/a2d2ff/003366?text=MUBASIC' };
-                    await addDoc(collection(db, MUSIC_COLLECTION), musicDoc);
-                    createToast("Müzik başarıyla eklendi!", false);
-                    uploadTitleInput.value = '';
-                    uploadArtistInput.value = '';
-                    uploadedFile = null;
-                    dropZone.querySelector('p').textContent = `Dosyayı buraya sürükleyin`;
-                } catch (error) {
-                    console.error("Müzik eklenirken hata oluştu: ", error);
-                    createToast("Müzik eklenemedi. Lütfen tekrar deneyin.", true);
-                }
-            });
-        };
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+</script>
 
-        document.getElementById('home-btn').addEventListener('click', () => {
-            if (!isBlocked) { changeContent(HOME_PAGE_HTML, 'home-btn', attachPlatformEventListeners); }
-        });
-        document.getElementById('search-btn').addEventListener('click', () => {
-            if (!isBlocked) {
-                changeContent(SEARCH_PAGE_HTML, 'search-btn', () => {
-                    const searchInput = document.getElementById('search-input');
-                    if (searchInput) {
-                        searchInput.addEventListener('input', handleSearch);
-                        handleSearch();
-                    }
-                });
-            } else { createToast('Erişiminiz engellendi.', true); }
-        });
-        document.getElementById('favorites-btn').addEventListener('click', () => {
-            if (!isBlocked) {
-                changeContent(FAVORITES_PAGE_HTML, 'favorites-btn', () => {
-                    const favoritesListElement = document.getElementById('favorites-list');
-                    renderMusicList(favoritesListElement, musicList.filter(m => favoritesList.includes(m.docId)));
-                });
-            } else { createToast('Erişiminiz engellendi.', true); }
-        });
-        document.getElementById('admin-btn').addEventListener('click', () => {
-            if (!isBlocked) {
-                adminModal.classList.remove('hidden');
-                setTimeout(() => { adminModal.classList.add('opacity-100'); }, 10);
-            } else { createToast('Erişiminiz engellendi. Yönetici panelini açamazsınız.', true); }
-        });
-        submitPasswordBtn.addEventListener('click', () => {
-            if (adminPasswordInput.value === '1975') {
-                adminModal.classList.remove('opacity-100');
-                setTimeout(() => { adminModal.classList.add('hidden'); renderAdminPanel(); }, 300);
-            } else { createToast('Yanlış şifre!', true); }
-        });
-        saveNameBtn.addEventListener('click', async () => {
-            const userName = userNameInput.value.trim();
-            if (userName) {
-                saveNameBtn.textContent = 'Kaydediliyor...';
-                saveNameBtn.disabled = true;
-                const success = await saveUserName(userName);
-                if (success) {
-                    nameModal.classList.remove('opacity-100');
-                    setTimeout(() => { nameModal.classList.add('hidden'); renderAppContent(); }, 300);
-                    createToast('İsminiz başarıyla kaydedildi!', false);
-                } else {
-                    createToast('Bir hata oluştu. Lütfen tekrar deneyin.', true);
-                    saveNameBtn.textContent = 'Kaydet';
-                    saveNameBtn.disabled = false;
-                }
-            } else { createToast('Lütfen bir isim girin.', true); }
-        });
-    </script>
 </body>
 </html>
