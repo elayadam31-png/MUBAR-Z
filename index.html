@@ -2,7 +2,7 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-s">
     <title>Gələcəyin Xəritəsi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -238,46 +238,102 @@
     let results = [];
     let editingId = null;
 
-    // Default schedule data
+    // Default schedule data based on user's input
     const defaultSchedule = [
         { day: 'Bazar Ertəsi', tasks: [
-            { time: '07:30', description: 'Oyanış və Enerji ilə Başlanğıc' },
-            { time: '08:00', description: 'Sürətli Səhər Yeməyi' },
-            { time: '08:30', description: 'Dərsə Hazırlıq' },
-            { time: '10:00-18:00', description: 'Hazırlıq Dərsləri' },
-            { time: '20:00', description: 'Ev Tapşırıqları' }
+            { time: '07:30', description: 'Oyanis, seher yemeyi' },
+            { time: '10:00–11:00', description: 'Informatika derisi' },
+            { time: '11:00–12:00', description: 'Gedis/qayidis + qisa fasile' },
+            { time: '12:00–13:00', description: 'Fizika derisi' },
+            { time: '13:00–13:50', description: 'Nahar' },
+            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
+            { time: '15:30–16:30', description: 'Ev tapsirigi (riyaziyyat)' },
+            { time: '17:00–18:00', description: 'Telefon/istirahet' },
+            { time: '18:00–18:40', description: 'Axsam yemeyi' },
+            { time: '19:00–20:00', description: 'Ingilis dili derisi' },
+            { time: '20:15–22:30', description: 'Ev tapsirigi (informatika + fizika)' },
+            { time: '22:30–23:00', description: 'Telefon/rahatlama' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Çərşənbə Axşamı', tasks: [
-            { time: '07:30', description: 'Oyanış və Yüngül İdman' },
-            { time: '08:30', description: 'Sərbəst Ev Çalışması' },
-            { time: '15:00-18:00', description: 'Hazırlıq Dərsləri' },
-            { time: '19:00', description: 'Ev Tapşırıqları' }
+            { time: '08:00', description: 'Oyanis, seher yemeyi' },
+            { time: '09:00–11:00', description: 'Ev tapsirigi (riyaziyyat/fizika)' },
+            { time: '11:00–12:00', description: 'Idman + dus' },
+            { time: '12:00–13:00', description: 'Nahar' },
+            { time: '13:30–14:30', description: 'Tekrar (ingilis dili sozler)' },
+            { time: '15:00–16:00', description: 'Ingilis dili derisi' },
+            { time: '16:00–16:30', description: 'Qayidis + fasile' },
+            { time: '17:00–18:00', description: 'Azerbaycan dili derisi' },
+            { time: '18:10–19:00', description: 'Axsam yemeyi' },
+            { time: '19:00–21:30', description: 'Ev tapsirigi (ingilis + az dili)' },
+            { time: '21:30–22:00', description: 'Telefon/istirahet' },
+            { time: '22:00–23:00', description: 'Tekrar (riyaziyyat ve fizika)' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Çərşənbə', tasks: [
-            { time: '07:30', description: 'Oyanış və Rutin Hazırlıq' },
-            { time: '10:00-16:00', description: 'Hazırlıq Dərsləri' },
-            { time: '17:00', description: 'Ev Tapşırıqları və Dərs Təkrarı' },
-            { time: '19:00', description: 'İdman və Yaşamaq' }
+            { time: '07:30', description: 'Oyanis, seher yemeyi' },
+            { time: '10:00–11:00', description: 'Informatika derisi' },
+            { time: '11:00–12:00', description: 'Qayidis + qisa fasile' },
+            { time: '12:00–13:00', description: 'Fizika derisi' },
+            { time: '13:00–13:50', description: 'Nahar' },
+            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
+            { time: '15:30–17:00', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
+            { time: '17:00–18:00', description: 'Telefon/istirahet' },
+            { time: '18:00–18:40', description: 'Axsam yemeyi' },
+            { time: '19:00–21:30', description: 'Ev tapsirigi (informatika + az dili)' },
+            { time: '22:00–23:00', description: 'Tekrar (ingilis dili)' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Cümə Axşamı', tasks: [
-            { time: '07:30', description: 'Oyanış' },
-            { time: '08:30', description: 'Dərslərə Sərbəst Hazırlıq' },
-            { time: '12:00', description: 'Azərbaycan Dili Dərsi' },
-            { time: '14:00', description: 'Ev Tapşırıqları' }
+            { time: '08:00', description: 'Oyanis, seher yemeyi' },
+            { time: '09:00–11:30', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
+            { time: '11:30–12:00', description: 'Gedis' },
+            { time: '12:00–13:00', description: 'Azerbaycan dili derisi' },
+            { time: '13:00–14:00', description: 'Qayidis + nahar' },
+            { time: '14:00–16:00', description: 'Ev tapsirigi (az dili + ingilis dili)' },
+            { time: '16:00–17:00', description: 'Idman ve ya telefon' },
+            { time: '18:00–19:00', description: 'Axsam yemeyi' },
+            { time: '19:00–21:00', description: 'Tekrar (informatika + riyaziyyat)' },
+            { time: '22:00–23:00', description: 'Rahat oxu ve ya telefon' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Cümə', tasks: [
-            { time: '07:30', description: 'Oyanış və Dərs Hazırlığı' },
-            { time: '10:00-16:00', description: 'Hazırlıq Dərsləri' },
-            { time: '19:00', description: 'Ev Tapşırıqlarının Sonu' }
+            { time: '07:30', description: 'Oyanis, seher yemeyi' },
+            { time: '10:00–11:00', description: 'Informatika derisi' },
+            { time: '11:00–12:00', description: 'Qayidis + qisa fasile' },
+            { time: '12:00–13:00', description: 'Fizika derisi' },
+            { time: '13:00–13:50', description: 'Nahar' },
+            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
+            { time: '15:30–16:30', description: 'Ev tapsirigi (riyaziyyat)' },
+            { time: '17:00–18:00', description: 'Azerbaycan dili derisi' },
+            { time: '18:10–19:00', description: 'Axsam yemeyi' },
+            { time: '19:00–21:30', description: 'Ev tapsirigi (informatika + fizika + az dili)' },
+            { time: '22:00–23:00', description: 'Tekrar (ingilis dili)' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Şənbə', tasks: [
-            { time: '09:00', description: 'İngilis və Azərbaycan Dili Dərsləri' },
-            { time: '14:00', description: 'Həftənin Mövzularını Ümumi Təkrar' }
+            { time: '07:00', description: 'Oyanis, seher yemeyi' },
+            { time: '09:00–10:00', description: 'Ingilis dili derisi' },
+            { time: '10:00–11:00', description: 'Qayidis + qisa fasile' },
+            { time: '12:00–13:00', description: 'Azerbaycan dili elave deris' },
+            { time: '13:00–14:00', description: 'Nahar' },
+            { time: '14:00–16:00', description: 'Ev tapsirigi (ingilis dili + az dili)' },
+            { time: '16:00–17:00', description: 'Idman ve ya telefon' },
+            { time: '18:00–19:00', description: 'Axsam yemeyi' },
+            { time: '19:00–21:30', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
+            { time: '22:00–23:00', description: 'Tekrar (informatika)' },
+            { time: '23:30', description: 'Yatmaq' }
         ]},
         { day: 'Bazar Günü', tasks: [
-            { time: '10:00', description: 'Rahat Oyanış və Səhər Yeməyi' },
-            { time: '12:00', description: 'Həftəlik Ümumi Təkrar' },
-            { time: '13:00', description: 'Ailə və Dostlarla Vaxt' }
+            { time: '09:00', description: 'Oyanis, seher yemeyi' },
+            { time: '10:00–12:00', description: 'Istirahet (idman, telefon, gezmek)' },
+            { time: '12:30–13:30', description: 'Nahar' },
+            { time: '14:00–16:00', description: 'Tekrar (heftenin movzulari yüngül şekilde)' },
+            { time: '16:00–18:00', description: 'Azad vaxt (hobbi, dostlarla vaxt)' },
+            { time: '18:00–19:00', description: 'Axsam yemeyi' },
+            { time: '19:00–21:00', description: 'Tekrar (ingilis dili + riyaziyyat)' },
+            { time: '22:00–23:00', description: 'Telefon/istirahet' },
+            { time: '23:30', description: 'Yatmaq' }
         ]}
     ];
 
