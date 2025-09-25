@@ -1,591 +1,148 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-s">
-    <title>Gələcəyin Xəritəsi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #0d0d0d;
-            color: #E0E0E0;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 2rem 1rem;
-        }
-        header {
-            text-align: center;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid #333;
-            margin-bottom: 2rem;
-        }
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #FFD700;
-            text-shadow: 2px 2px 8px rgba(255, 215, 0, 0.3);
-        }
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-top: 0.5rem;
-        }
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #FFD700;
-            text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
-            border-radius: 2px;
-        }
-        .card {
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-            border: 1px solid #333;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.15);
-        }
-        .day-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #444;
-            padding-bottom: 0.5rem;
-        }
-        .day-header h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3B82F6;
-        }
-        .task-list li {
-            padding: 0.75rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-list li:not(:last-child) {
-            border-bottom: 1px dashed #2a2a2a;
-        }
-        .task-time {
-            font-weight: bold;
-            color: #FFD700;
-        }
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: transform 0.2s;
-        }
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-        .action-btn svg {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-        .edit-btn svg { fill: #8B5CF6; }
-        .delete-btn svg { fill: #FF6347; }
-        .add-btn {
-            background: linear-gradient(45deg, #3B82F6, #8B5CF6);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: bold;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
-        .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
-        }
-        .input-group input, .input-group textarea, .input-group select {
-            background-color: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 8px;
-            padding: 0.75rem;
-            width: 100%;
-            margin-bottom: 1rem;
-            color: white;
-            transition: border-color 0.3s;
-        }
-        .input-group input:focus, .input-group textarea:focus {
-            outline: none;
-            border-color: #8B5CF6;
-        }
-        .result-item {
-            background-color: #1E1E1E;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            border: 1px solid #333;
-        }
-        .result-item h4 {
-            font-weight: bold;
-            color: #FFD700;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px dashed #444;
-            padding-bottom: 0.5rem;
-        }
-        .result-item p {
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-        }
-        .result-item .score {
-            font-weight: bold;
-            color: #8B5CF6;
-            margin-left: 0.5rem;
-        }
-        .result-item .icon {
-            margin-left: 0.5rem;
-            font-size: 1.1rem;
-        }
-        .hidden {
-            display: none !important;
-        }
-    </style>
-</head>
-<body class="bg-gray-900 text-gray-200">
+import React, { useState, useEffect, useRef } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously } from 'firebase/auth';
+import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
 
-<div class="container">
-    <header>
-        <h1>Gələcəyin Xəritəsi</h1>
-        <p>Hər anını dəyərləndir, çünki gələcəyini bu gün qurursan!</p>
-    </header>
+// Global variables provided by the Canvas environment
+const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-    <main>
-        <!-- Həftəlik Rutin Hissəsi -->
-        <section class="mb-8">
-            <h2 class="section-title">Həftəlik Rutin</h2>
-            <div id="schedule-container">
-                <!-- Rutin dinamik olaraq burada yaradılacaq -->
-            </div>
-        </section>
+const PUBLIC_CHAT_COLLECTION = `/artifacts/${appId}/public/data/messages`;
 
-        <!-- Sınaq Nəticələri Hissəsi -->
-        <section class="mb-8">
-            <h2 class="section-title">Sınaq Nəticələri</h2>
-            <div id="test-results-section" class="card">
-                <div class="input-group">
-                    <label class="block mb-2 font-semibold">Tarix</label>
-                    <input type="date" id="test-date">
-                </div>
-                <div class="input-group">
-                    <label class="block mb-2 font-semibold">Fizika Balı (max 100)</label>
-                    <input type="number" id="fizika-score" placeholder="Daxil et">
-                </div>
-                <div class="input-group">
-                    <label class="block mb-2 font-semibold">İnformatika Balı (max 100)</label>
-                    <input type="number" id="informatika-score" placeholder="Daxil et">
-                </div>
-                <div class="input-group">
-                    <label class="block mb-2 font-semibold">Riyaziyyat Balı (max 100)</label>
-                    <input type="number" id="riyaziyyat-score" placeholder="Daxil et">
-                </div>
-                <div class="input-group">
-                    <label class="block mb-2 font-semibold">Şərh</label>
-                    <textarea id="comment" placeholder="Necə olduğunu yaz..." rows="3"></textarea>
-                </div>
-                
-                <div class="flex justify-end mt-4 space-x-2">
-                    <button id="add-btn" class="add-btn">Nəticəni Əlavə Et</button>
-                    <button id="save-btn" class="add-btn hidden">Dəyişiklikləri Yadda Saxla</button>
-                    <button id="cancel-btn" class="add-btn hidden">Ləğv Et</button>
-                </div>
-            </div>
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-            <div id="results-container" class="mt-8">
-                <!-- Nəticələr buraya dinamik olaraq əlavə olunacaq -->
-            </div>
-        </section>
-    </main>
-</div>
+const App = () => {
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
-<script>
-    const STORAGE_KEY_SCHEDULE = 'user_schedule';
-    const STORAGE_KEY_RESULTS = 'user_results';
+  useEffect(() => {
+    const signIn = async () => {
+      try {
+        await signInAnonymously(auth);
+      } catch (error) {
+        console.error("Firebase'də anonim daxil olarkən səhv baş verdi:", error);
+      }
+    };
 
-    let schedule = [];
-    let results = [];
-    let editingId = null;
+    signIn();
 
-    // Default schedule data based on user's input
-    const defaultSchedule = [
-        { day: 'Bazar Ertəsi', tasks: [
-            { time: '07:30', description: 'Oyanis, seher yemeyi' },
-            { time: '10:00–11:00', description: 'Informatika derisi' },
-            { time: '11:00–12:00', description: 'Gedis/qayidis + qisa fasile' },
-            { time: '12:00–13:00', description: 'Fizika derisi' },
-            { time: '13:00–13:50', description: 'Nahar' },
-            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
-            { time: '15:30–16:30', description: 'Ev tapsirigi (riyaziyyat)' },
-            { time: '17:00–18:00', description: 'Telefon/istirahet' },
-            { time: '18:00–18:40', description: 'Axsam yemeyi' },
-            { time: '19:00–20:00', description: 'Ingilis dili derisi' },
-            { time: '20:15–22:30', description: 'Ev tapsirigi (informatika + fizika)' },
-            { time: '22:30–23:00', description: 'Telefon/rahatlama' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Çərşənbə Axşamı', tasks: [
-            { time: '08:00', description: 'Oyanis, seher yemeyi' },
-            { time: '09:00–11:00', description: 'Ev tapsirigi (riyaziyyat/fizika)' },
-            { time: '11:00–12:00', description: 'Idman + dus' },
-            { time: '12:00–13:00', description: 'Nahar' },
-            { time: '13:30–14:30', description: 'Tekrar (ingilis dili sozler)' },
-            { time: '15:00–16:00', description: 'Ingilis dili derisi' },
-            { time: '16:00–16:30', description: 'Qayidis + fasile' },
-            { time: '17:00–18:00', description: 'Azerbaycan dili derisi' },
-            { time: '18:10–19:00', description: 'Axsam yemeyi' },
-            { time: '19:00–21:30', description: 'Ev tapsirigi (ingilis + az dili)' },
-            { time: '21:30–22:00', description: 'Telefon/istirahet' },
-            { time: '22:00–23:00', description: 'Tekrar (riyaziyyat ve fizika)' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Çərşənbə', tasks: [
-            { time: '07:30', description: 'Oyanis, seher yemeyi' },
-            { time: '10:00–11:00', description: 'Informatika derisi' },
-            { time: '11:00–12:00', description: 'Qayidis + qisa fasile' },
-            { time: '12:00–13:00', description: 'Fizika derisi' },
-            { time: '13:00–13:50', description: 'Nahar' },
-            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
-            { time: '15:30–17:00', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
-            { time: '17:00–18:00', description: 'Telefon/istirahet' },
-            { time: '18:00–18:40', description: 'Axsam yemeyi' },
-            { time: '19:00–21:30', description: 'Ev tapsirigi (informatika + az dili)' },
-            { time: '22:00–23:00', description: 'Tekrar (ingilis dili)' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Cümə Axşamı', tasks: [
-            { time: '08:00', description: 'Oyanis, seher yemeyi' },
-            { time: '09:00–11:30', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
-            { time: '11:30–12:00', description: 'Gedis' },
-            { time: '12:00–13:00', description: 'Azerbaycan dili derisi' },
-            { time: '13:00–14:00', description: 'Qayidis + nahar' },
-            { time: '14:00–16:00', description: 'Ev tapsirigi (az dili + ingilis dili)' },
-            { time: '16:00–17:00', description: 'Idman ve ya telefon' },
-            { time: '18:00–19:00', description: 'Axsam yemeyi' },
-            { time: '19:00–21:00', description: 'Tekrar (informatika + riyaziyyat)' },
-            { time: '22:00–23:00', description: 'Rahat oxu ve ya telefon' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Cümə', tasks: [
-            { time: '07:30', description: 'Oyanis, seher yemeyi' },
-            { time: '10:00–11:00', description: 'Informatika derisi' },
-            { time: '11:00–12:00', description: 'Qayidis + qisa fasile' },
-            { time: '12:00–13:00', description: 'Fizika derisi' },
-            { time: '13:00–13:50', description: 'Nahar' },
-            { time: '14:30–15:30', description: 'Riyaziyyat derisi' },
-            { time: '15:30–16:30', description: 'Ev tapsirigi (riyaziyyat)' },
-            { time: '17:00–18:00', description: 'Azerbaycan dili derisi' },
-            { time: '18:10–19:00', description: 'Axsam yemeyi' },
-            { time: '19:00–21:30', description: 'Ev tapsirigi (informatika + fizika + az dili)' },
-            { time: '22:00–23:00', description: 'Tekrar (ingilis dili)' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Şənbə', tasks: [
-            { time: '07:00', description: 'Oyanis, seher yemeyi' },
-            { time: '09:00–10:00', description: 'Ingilis dili derisi' },
-            { time: '10:00–11:00', description: 'Qayidis + qisa fasile' },
-            { time: '12:00–13:00', description: 'Azerbaycan dili elave deris' },
-            { time: '13:00–14:00', description: 'Nahar' },
-            { time: '14:00–16:00', description: 'Ev tapsirigi (ingilis dili + az dili)' },
-            { time: '16:00–17:00', description: 'Idman ve ya telefon' },
-            { time: '18:00–19:00', description: 'Axsam yemeyi' },
-            { time: '19:00–21:30', description: 'Ev tapsirigi (riyaziyyat + fizika)' },
-            { time: '22:00–23:00', description: 'Tekrar (informatika)' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]},
-        { day: 'Bazar Günü', tasks: [
-            { time: '09:00', description: 'Oyanis, seher yemeyi' },
-            { time: '10:00–12:00', description: 'Istirahet (idman, telefon, gezmek)' },
-            { time: '12:30–13:30', description: 'Nahar' },
-            { time: '14:00–16:00', description: 'Tekrar (heftenin movzulari yüngül şekilde)' },
-            { time: '16:00–18:00', description: 'Azad vaxt (hobbi, dostlarla vaxt)' },
-            { time: '18:00–19:00', description: 'Axsam yemeyi' },
-            { time: '19:00–21:00', description: 'Tekrar (ingilis dili + riyaziyyat)' },
-            { time: '22:00–23:00', description: 'Telefon/istirahet' },
-            { time: '23:30', description: 'Yatmaq' }
-        ]}
-    ];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadData();
-        renderSchedule();
-        renderResults();
-        
-        document.getElementById('add-btn').addEventListener('click', addTestResult);
-        document.getElementById('save-btn').addEventListener('click', saveTestResult);
-        document.getElementById('cancel-btn').addEventListener('click', exitEditMode);
+    const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        console.log("İstifadəçi daxil oldu, UID:", currentUser.uid);
+      }
     });
 
-    function saveData() {
-        localStorage.setItem(STORAGE_KEY_SCHEDULE, JSON.stringify(schedule));
-        localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(results));
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const q = query(
+      collection(db, PUBLIC_CHAT_COLLECTION),
+      orderBy('createdAt', 'asc'),
+      limit(50)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedMessages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setMessages(fetchedMessages);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (newMessage.trim() === '' || !user) {
+      return;
     }
 
-    function loadData() {
-        const storedSchedule = localStorage.getItem(STORAGE_KEY_SCHEDULE);
-        schedule = storedSchedule ? JSON.parse(storedSchedule) : defaultSchedule;
-        
-        const storedResults = localStorage.getItem(STORAGE_KEY_RESULTS);
-        results = storedResults ? JSON.parse(storedResults) : [];
-    }
+    setLoading(true);
 
-    function renderSchedule() {
-        const container = document.getElementById('schedule-container');
-        container.innerHTML = '';
-        schedule.forEach((dayData, dayIndex) => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <div class="day-header">
-                    <h3>${dayData.day}</h3>
-                    <button class="action-btn edit-btn" onclick="editSchedule(${dayIndex})">
-                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14.06 9.06L15.94 10.94L18.41 8.47L16.53 6.59L14.06 9.06zM20.65 4.35C20.26 3.96 19.63 3.96 19.24 4.35L17.7 5.89L20.65 8.84L22.19 7.3C22.58 6.91 22.58 6.28 22.19 5.89L20.65 4.35zM12 18.01H2V20.01H12V18.01zM11.91 14.73L6.96 19.68C6.67 19.97 6.2 20.08 5.81 19.96L2.61 19.16C2.22 19.04 2.03 18.59 2.19 18.2L5.43 11.83L11.91 14.73z"/>
-                        </svg>
-                    </button>
-                </div>
-                <ul class="task-list">
-                    ${dayData.tasks.map(task => `
-                        <li>
-                            <span class="task-time">${task.time}</span>
-                            <span>${task.description}</span>
-                        </li>
-                    `).join('')}
-                </ul>
-            `;
-            container.appendChild(card);
-        });
+    try {
+      await addDoc(collection(db, PUBLIC_CHAT_COLLECTION), {
+        text: newMessage,
+        uid: user.uid,
+        displayName: `Anonim-${user.uid.substring(0, 5)}`,
+        createdAt: serverTimestamp(),
+      });
+      setNewMessage('');
+    } catch (error) {
+      console.error("Mesaj göndərərkən səhv baş verdi:", error);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    function editSchedule(dayIndex) {
-        const dayData = schedule[dayIndex];
-        const container = document.getElementById('schedule-container');
-        container.innerHTML = `
-            <div id="schedule-edit-form" class="card">
-                <h3 class="font-bold text-lg mb-4 text-center">"${dayData.day}" üçün Rutinə Dəyişiklik Et</h3>
-                <div id="edit-tasks-container">
-                    ${dayData.tasks.map((task, index) => `
-                        <div class="flex items-center gap-2 mb-2">
-                            <input type="text" value="${task.time}" placeholder="Vaxt" data-index="${index}" data-field="time" class="flex-1">
-                            <input type="text" value="${task.description}" placeholder="Tapşırıq" data-index="${index}" data-field="description" class="flex-[3]">
-                            <button class="action-btn delete-btn" onclick="removeTaskFromEdit(${index})">
-                                <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                                </svg>
-                            </button>
-                        </div>
-                    `).join('')}
-                </div>
-                <button class="add-btn mt-4" onclick="addTaskToEdit()">Yeni Tapşırıq Əlavə Et</button>
-                <div class="flex justify-end mt-4 space-x-2">
-                    <button class="add-btn" onclick="saveScheduleChanges(${dayIndex})">Yadda Saxla</button>
-                    <button class="add-btn" onclick="cancelScheduleEdit()">Ləğv Et</button>
-                </div>
+  return (
+    <div className="flex flex-col h-screen bg-gray-900 text-gray-100">
+      <header className="p-4 bg-gray-800 shadow-md flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-indigo-400">İctimai Mesajlaşma Otağı</h1>
+        <div className="text-sm text-gray-400">
+          İstifadəçi ID: <span className="font-mono text-xs">{user?.uid || 'Yüklənir...'}</span>
+        </div>
+      </header>
+
+      <main className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="space-y-4">
+          {messages.map((msg, index) => (
+            <div
+              key={msg.id}
+              className={`p-3 rounded-lg shadow-md flex flex-col ${
+                msg.uid === user?.uid ? 'bg-indigo-600 self-end ml-auto' : 'bg-gray-700 self-start mr-auto'
+              } max-w-xs`}
+            >
+              <span className="font-bold text-sm mb-1 text-gray-200">
+                {msg.displayName}
+              </span>
+              <p className="text-sm break-words">{msg.text}</p>
+              <span className="text-xs text-right mt-1 opacity-75">
+                {msg.createdAt?.toDate().toLocaleTimeString('az-AZ') || 'Yüklənir...'}
+              </span>
             </div>
-        `;
-    }
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+      </main>
 
-    function addTaskToEdit() {
-        const container = document.getElementById('edit-tasks-container');
-        const newIndex = container.children.length;
-        const newTaskHTML = `
-            <div class="flex items-center gap-2 mb-2">
-                <input type="text" value="" placeholder="Vaxt" data-index="${newIndex}" data-field="time" class="flex-1">
-                <input type="text" value="" placeholder="Tapşırıq" data-index="${newIndex}" data-field="description" class="flex-[3]">
-                <button class="action-btn delete-btn" onclick="removeTaskFromEdit(${newIndex})">
-                    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                    </svg>
-                </button>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', newTaskHTML);
-    }
+      <form onSubmit={handleSendMessage} className="p-4 bg-gray-800 shadow-lg flex items-center">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder="Mesajınızı daxil edin..."
+          className="flex-1 p-3 rounded-l-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          type="submit"
+          className={`p-3 text-white rounded-r-lg font-semibold transition-colors duration-200 ${
+            loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-500 hover:bg-indigo-600'
+          }`}
+          disabled={loading}
+        >
+          {loading ? 'Göndərilir...' : 'Göndər'}
+        </button>
+      </form>
+    </div>
+  );
+};
 
-    function removeTaskFromEdit(index) {
-        const element = document.querySelector(`#edit-tasks-container [data-index="${index}"]`).parentElement;
-        element.remove();
-    }
-    
-    function saveScheduleChanges(dayIndex) {
-        const container = document.getElementById('edit-tasks-container');
-        const newTasks = [];
-        container.querySelectorAll('div.flex').forEach(taskElement => {
-            const time = taskElement.querySelector('input[data-field="time"]').value;
-            const description = taskElement.querySelector('input[data-field="description"]').value;
-            if (time && description) {
-                newTasks.push({ time, description });
-            }
-        });
-        schedule[dayIndex].tasks = newTasks;
-        saveData();
-        renderSchedule();
-    }
-
-    function cancelScheduleEdit() {
-        renderSchedule();
-    }
-
-    function getPerformanceIndicator(score) {
-        if (score >= 80) return { icon: '⭐', color: 'bg-green-700' };
-        if (score >= 50) return { icon: '👍', color: 'bg-yellow-700' };
-        return { icon: '👇', color: 'bg-red-700' };
-    }
-
-    function renderResults() {
-        const container = document.getElementById('results-container');
-        container.innerHTML = '';
-        if (results.length === 0) {
-            container.innerHTML = '<p class="text-center text-gray-500">Hələlik heç bir nəticə qeyd edilməyib.</p>';
-            return;
-        }
-        results.forEach(res => {
-            const el = document.createElement('div');
-            el.className = 'result-item';
-            el.innerHTML = `
-                <div class="flex justify-between items-center mb-2">
-                    <h4 class="text-lg">${res.date}</h4>
-                    <div class="flex gap-2">
-                        <button class="action-btn edit-btn" onclick="editTestResult('${res.id}')">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14.06 9.06L15.94 10.94L18.41 8.47L16.53 6.59L14.06 9.06zM20.65 4.35C20.26 3.96 19.63 3.96 19.24 4.35L17.7 5.89L20.65 8.84L22.19 7.3C22.58 6.91 22.58 6.28 22.19 5.89L20.65 4.35zM12 18.01H2V20.01H12V18.01zM11.91 14.73L6.96 19.68C6.67 19.97 6.2 20.08 5.81 19.96L2.61 19.16C2.22 19.04 2.03 18.59 2.19 18.2L5.43 11.83L11.91 14.73z"/>
-                            </svg>
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deleteTestResult('${res.id}')">
-                            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                ${res.fizika ? `<p>Fizika: <span class="score">${res.fizika}</span> bal <span class="icon">${getPerformanceIndicator(res.fizika).icon}</span></p>` : ''}
-                ${res.informatika ? `<p>İnformatika: <span class="score">${res.informatika}</span> bal <span class="icon">${getPerformanceIndicator(res.informatika).icon}</span></p>` : ''}
-                ${res.riyaziyyat ? `<p>Riyaziyyat: <span class="score">${res.riyaziyyat}</span> bal <span class="icon">${getPerformanceIndicator(res.riyaziyyat).icon}</span></p>` : ''}
-                ${res.comment ? `<p class="mt-2">Şərh: ${res.comment}</p>` : ''}
-            `;
-            container.appendChild(el);
-        });
-    }
-
-    function addTestResult() {
-        const date = document.getElementById('test-date').value;
-        const fizika = parseInt(document.getElementById('fizika-score').value) || null;
-        const informatika = parseInt(document.getElementById('informatika-score').value) || null;
-        const riyaziyyat = parseInt(document.getElementById('riyaziyyat-score').value) || null;
-        const comment = document.getElementById('comment').value;
-
-        if (!date || (!fizika && !informatika && !riyaziyyat)) {
-            alert('Zəhmət olmasa, tarixi və ən az bir balı daxil edin.');
-            return;
-        }
-
-        const newResult = {
-            id: Date.now().toString(),
-            date,
-            fizika,
-            informatika,
-            riyaziyyat,
-            comment
-        };
-        results.unshift(newResult);
-        saveData();
-        renderResults();
-        clearInputs();
-    }
-
-    function editTestResult(id) {
-        editingId = id;
-        const res = results.find(r => r.id === id);
-        if (res) {
-            document.getElementById('test-date').value = res.date;
-            document.getElementById('fizika-score').value = res.fizika || '';
-            document.getElementById('informatika-score').value = res.informatika || '';
-            document.getElementById('riyaziyyat-score').value = res.riyaziyyat || '';
-            document.getElementById('comment').value = res.comment || '';
-            document.getElementById('add-btn').classList.add('hidden');
-            document.getElementById('save-btn').classList.remove('hidden');
-            document.getElementById('cancel-btn').classList.remove('hidden');
-        }
-    }
-
-    function saveTestResult() {
-        const date = document.getElementById('test-date').value;
-        const fizika = parseInt(document.getElementById('fizika-score').value) || null;
-        const informatika = parseInt(document.getElementById('informatika-score').value) || null;
-        const riyaziyyat = parseInt(document.getElementById('riyaziyyat-score').value) || null;
-        const comment = document.getElementById('comment').value;
-
-        if (!date || (!fizika && !informatika && !riyaziyyat)) {
-            alert('Zəhmət olmasa, tarixi və ən az bir balı daxil edin.');
-            return;
-        }
-        
-        const index = results.findIndex(r => r.id === editingId);
-        if (index !== -1) {
-            results[index] = { id: editingId, date, fizika, informatika, riyaziyyat, comment };
-            saveData();
-            renderResults();
-            exitEditMode();
-        }
-    }
-
-    function deleteTestResult(id) {
-        if (!confirm('Bu nəticəni silmək istədiyinizə əminsiniz?')) return;
-        results = results.filter(r => r.id !== id);
-        saveData();
-        renderResults();
-        if (editingId === id) {
-            exitEditMode();
-        }
-    }
-
-    function exitEditMode() {
-        editingId = null;
-        clearInputs();
-        document.getElementById('add-btn').classList.remove('hidden');
-        document.getElementById('save-btn').classList.add('hidden');
-        document.getElementById('cancel-btn').classList.add('hidden');
-    }
-
-    function clearInputs() {
-        document.getElementById('test-date').value = '';
-        document.getElementById('fizika-score').value = '';
-        document.getElementById('informatika-score').value = '';
-        document.getElementById('riyaziyyat-score').value = '';
-        document.getElementById('comment').value = '';
-    }
-</script>
-
-</body>
-</html>
+export default App;
