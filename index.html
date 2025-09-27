@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mənə Bir Şans Daha Verərsən? 🙏</title>
+    <!-- Tailwind CSS üçün skript -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter və romantik Parisienne -->
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fərdi CSS stilləri və ürək animasyonu */
+        :root {
+            --primary-color: #f73859; /* Tünd çəhrayı/qırmızı */
+            --bg-color: #0d0c1d; /* Tünd fon */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            /* Sürüşdürməni (scroll) aktiv saxlayır */
+            min-height: 100vh;
+            overflow-x: hidden; /* Yanlara sürüşməni qarşısını alaq */
+        }
+        /* Flex konteyneri tam hündürlükdə olmalıdır ki, content ortalana bilsin. */
+        .page-container {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             min-height: 100vh; /* Minimum bir ekran hündürlüyü */
+             padding: 1rem;
+        }
+
+        .proposal-card {
+            box-shadow: 0 10px 30px rgba(247, 56, 89, 0.4);
+            animation: fadeIn 2s ease-out;
+            margin: 2rem 0; /* Kartın yuxarı və aşağı hissəsində boşluq yaradır */
+        }
+
+        /* Başlıq üçün romantik font */
+        .romantic-font {
+            font-family: 'Parisienne', cursive;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ürək animasiyası üçün konteyner */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            background: var(--primary-color);
+            transform: rotate(-45deg);
+            opacity: 0.8;
+            animation: floatUp linear infinite;
+        }
+        .heart:before, .heart:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 50%;
+        }
+        .heart:before {
+            top: -50%;
+            left: 0;
+        }
+        .heart:after {
+            top: 0;
+            left: 50%;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translate(0, 100vh) scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(0, -100px) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        /* Xeyr düyməsinin başlanğıc vəziyyəti */
+        #no-button {
+            position: relative; /* Hərəkətə başlamaq üçün vacibdir */
+            transform: translate(0, 0) scale(1);
+        }
+    </style>
+</head>
+<body class="p-0 m-0">
+
+    <!-- Ürək Animasiya Konteyneri -->
+    <div class="hearts-container" id="hearts-container"></div>
+    
+    <!-- Səhifə Konteyneri (Mərkəzə gətirmək üçün) -->
+    <div class="page-container">
+
+        <!-- Əsas Təklif Kartı -->
+        <div id="proposal-section" class="proposal-card bg-zinc-800 p-8 md:p-12 rounded-3xl max-w-lg w-full text-center z-10">
+            
+            <!-- BAŞLIQ DƏYİŞİKLİYİ: "Tünay" yerinə "Tunay" -->
+            <h1 class="text-6xl md:text-8xl romantic-font text-red-400 mb-6">
+                Tunay
+            </h1>
+
+            <!-- Mesajı Yazın -->
+            <p class="text-xl md:text-2xl text-red-300 mb-8">
+                Həyatımın ən **dəyərli** insanı, <span id="partner-name">Sevgilim</span>,
+            </p>
+
+            <p class="text-3xl md:text-4xl font-bold text-white mb-8 leading-snug">
+                Bilirəm ki, səhvlərim oldu. Lakin sən hələ də mənim üçün hər şeysən.
+            </p>
+            <p class="text-4xl md:text-5xl font-extrabold text-red-400 mb-10 leading-snug">
+                Xahiş edirəm, **Mənə Bir Şans Daha Verərsən**?
+            </p>
+
+            <!-- Düymələr -->
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
+                
+                <!-- Bəli Düyməsi (Əsas Hədəf) -->
+                <button onclick="acceptProposal()" class="w-full sm:w-auto px-10 py-4 text-xl font-bold rounded-full text-white bg-primary-color hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50">
+                    Bəli! Hər şeyə yenidən başlayaq!
+                </button>
+                
+                <!-- Xeyr Düyməsi (Hərəkət edən) -->
+                <button id="no-button" onmouseover="moveNoButton()" ontouchstart="moveNoButton()" class="w-full sm:w-auto px-8 py-4 text-lg rounded-full text-zinc-300 bg-zinc-700 hover:bg-zinc-600 transition duration-150 ease-in-out">
+                    Xeyr
+                </button>
+            </div>
+            
+        </div>
+
+        <!-- Uğur Mesajı (Gizli) - "Bəli" basıldıqda görünür -->
+        <div id="success-section" class="proposal-card bg-black p-8 md:p-12 rounded-3xl max-w-lg w-full text-center z-10 hidden transition duration-500 ease-in-out min-h-[50vh] flex flex-col justify-center items-center">
+            <div class="text-8xl mb-6 animate-pulse">
+                ❤️💫
+            </div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
+                Yaxşı ki, Varsan!
+            </h2>
+            <p class="text-xl md:text-2xl text-red-400">
+                Mənə bu şansı verdiyin üçün təşəkkür edirəm. Sənə söz verirəm, bu dəfə hər şeyi daha düzgün edəcəyəm.
+            </p>
+        </div>
+        
+    </div>
+
+    <script>
+        // Global variables for the heart effect
+        let heartInterval;
+
+        /**
+         * Başlanğıc funksiyası: Ürək effektini başladır və ad daxil etməyi təklif edir.
+         */
+        window.onload = () => {
+            // Adı soruşma (daha şəxsi etmək üçün)
+            const name = prompt("Təklif etdiyiniz sevdiyiniz insanın adını daxil edin (məsələn: Aygün):");
+            const partnerNameElement = document.getElementById('partner-name');
+            if (name && partnerNameElement) {
+                partnerNameElement.textContent = name;
+            } else if (partnerNameElement) {
+                partnerNameElement.textContent = "Sən"; // Ad daxil edilməsə 'Sən' yazsın
+            }
+
+            // Ürək animasiyasını başlat
+            generateHearts();
+        };
+
+        /**
+         * Ürək animasiyasını yaradır.
+         */
+        function generateHearts() {
+            const container = document.getElementById('hearts-container');
+            
+            // Hər 500 ms-də yeni ürək yaradır
+            heartInterval = setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                // Təsadüfi ölçü və yer
+                const size = Math.random() * 20 + 10; 
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                
+                const leftPosition = Math.random() * 100; 
+                heart.style.left = `${leftPosition}vw`;
+
+                // Təsadüfi animasiya müddəti
+                heart.style.animationDuration = `${Math.random() * 6 + 5}s`; 
+                
+                container.appendChild(heart);
+
+                // Ürəyi 12 saniyə sonra yox et
+                setTimeout(() => {
+                    heart.remove();
+                }, 12000); 
+
+            }, 500); 
+        }
+
+        /**
+         * "Xeyr" düyməsini istifadəçidən uzaqlaşdırır.
+         */
+        function moveNoButton() {
+            const noButton = document.getElementById('no-button');
+            
+            // Yeni təsadüfi yerin hesablanması
+            const maxMovement = 80; 
+            const newX = (Math.random() - 0.5) * maxMovement; 
+            const newY = (Math.random() - 0.5) * maxMovement; 
+
+            // Düyməni kiçik bir dəyişikliklə yerini dəyişdir
+            noButton.style.transform = `translate(${newX}px, ${newY}px) scale(0.8)`;
+            noButton.style.transition = 'transform 0.3s ease-out';
+            
+            // Bir mesaj göstər
+            showTemporaryMessage("Xahiş edirəm, cavabın 'Bəli' olsun! 🙏", 'no-button');
+            
+            // Transformasiyanı bir neçə saniyə sonra sıfırlayın ki, növbəti dəfə hərəkət edə bilsin
+            setTimeout(() => {
+                noButton.style.transform = `translate(0, 0) scale(1)`;
+            }, 2000);
+        }
+
+        /**
+         * Təklif qəbul edildikdə cavab göstərilir.
+         */
+        function acceptProposal() {
+            // Əsas təklif hissəsini gizlət
+            const proposalSection = document.getElementById('proposal-section');
+            const pageContainer = document.querySelector('.page-container');
+
+            // Uğur hissəsini göstər
+            const successSection = document.getElementById('success-section');
+            
+            // Səhifənin mərkəzlənməsini təmin etmək üçün
+            pageContainer.classList.add('min-h-screen'); 
+            
+            proposalSection.classList.add('hidden');
+            successSection.classList.remove('hidden');
+
+            // Ürək yaratma intervalını təmizlə və daha sürətli, daha böyük ürəklər başlat
+            clearInterval(heartInterval);
+            
+            // Qalibiyyət effekti
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = ''; // Köhnə ürəkləri təmizlə
+            
+            let celebrationCount = 0;
+            const celebrationInterval = setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.style.animationDuration = `${Math.random() * 3 + 2}s`; // Daha sürətli
+                heart.style.opacity = 1;
+                
+                // Böyük və fərqli rənglər
+                const size = Math.random() * 40 + 20;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.background = Math.random() < 0.5 ? 'red' : 'pink';
+
+                // Təsadüfi yer
+                heart.style.left = `${Math.random() * 100}vw`;
+
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 5000);
+
+                celebrationCount++;
+                if (celebrationCount > 50) { 
+                    clearInterval(celebrationInterval);
+                }
+            }, 100);
+        }
+
+        /**
+         * Müvəqqəti mesaj göstərir (Alert yerinə)
+         */
+        function showTemporaryMessage(message, targetId) {
+            let msgElement = document.getElementById('temp-message');
+            if (!msgElement) {
+                msgElement = document.createElement('div');
+                msgElement.id = 'temp-message';
+                msgElement.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-xl transition-opacity duration-300 z-50';
+                document.body.appendChild(msgElement);
+            }
+            msgElement.textContent = message;
+            msgElement.style.opacity = '1';
+
+            setTimeout(() => {
+                msgElement.style.opacity = '0';
+            }, 2000);
+        }
+
+    </script>
+</body>
+</html>
