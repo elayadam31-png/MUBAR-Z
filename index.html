@@ -3,310 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mənə Bir Şans Daha Verərsən? 🙏</title>
-    <!-- Tailwind CSS üçün skript -->
+    <title>Masroxx Login & Qeydiyyat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter və romantik Parisienne -->
-    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Fərdi CSS stilləri və ürək animasyonu */
-        :root {
-            --primary-color: #f73859; /* Tünd çəhrayı/qırmızı */
-            --bg-color: #0d0c1d; /* Tünd fon */
-        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            /* Sürüşdürməni (scroll) aktiv saxlayır */
-            min-height: 100vh;
-            overflow-x: hidden; /* Yanlara sürüşməni qarşısını alaq */
-        }
-        /* Flex konteyneri tam hündürlükdə olmalıdır ki, content ortalana bilsin. */
-        .page-container {
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             min-height: 100vh; /* Minimum bir ekran hündürlüyü */
-             padding: 1rem;
-        }
-
-        .proposal-card {
-            box-shadow: 0 10px 30px rgba(247, 56, 89, 0.4);
-            animation: fadeIn 2s ease-out;
-            margin: 2rem 0; /* Kartın yuxarı və aşağı hissəsində boşluq yaradır */
-        }
-
-        /* Başlıq üçün romantik font */
-        .romantic-font {
-            font-family: 'Parisienne', cursive;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Ürək animasiyası üçün konteyner */
-        .hearts-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .heart {
-            position: absolute;
-            background: var(--primary-color);
-            transform: rotate(-45deg);
-            opacity: 0.8;
-            animation: floatUp linear infinite;
-        }
-        .heart:before, .heart:after {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-color);
-            border-radius: 50%;
-        }
-        .heart:before {
-            top: -50%;
-            left: 0;
-        }
-        .heart:after {
-            top: 0;
-            left: 50%;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translate(0, 100vh) scale(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translate(0, -100px) scale(1.2);
-                opacity: 0;
-            }
-        }
-        
-        /* Xeyr düyməsinin başlanğıc vəziyyəti */
-        #no-button {
-            position: relative; /* Hərəkətə başlamaq üçün vacibdir */
-            transform: translate(0, 0) scale(1);
+            background: #1a202c; /* Tünd fon rəngi */
+            color: #e2e8f0; /* Açıq mətn rəngi */
         }
     </style>
 </head>
-<body class="p-0 m-0">
+<body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Ürək Animasiya Konteyneri -->
-    <div class="hearts-container" id="hearts-container"></div>
-    
-    <!-- Səhifə Konteyneri (Mərkəzə gətirmək üçün) -->
-    <div class="page-container">
+    <!-- Əsas Kapsayıcı (Container) -->
+    <div id="app" class="w-full max-w-md bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
 
-        <!-- Əsas Təklif Kartı -->
-        <div id="proposal-section" class="proposal-card bg-zinc-800 p-8 md:p-12 rounded-3xl max-w-lg w-full text-center z-10">
-            
-            <!-- BAŞLIQ DƏYİŞİKLİYİ: "Tünay" yerinə "Tunay" -->
-            <h1 class="text-6xl md:text-8xl romantic-font text-red-400 mb-6">
-                Tunay
-            </h1>
+        <!-- Başlıq -->
+        <header class="bg-gray-700 text-center py-6 px-4">
+            <h1 id="pageTitle" class="text-3xl font-bold text-white">Xoş gəlmisiniz!</h1>
+        </header>
 
-            <!-- Mesajı Yazın -->
-            <p class="text-xl md:text-2xl text-red-300 mb-8">
-                Həyatımın ən **dəyərli** insanı, <span id="partner-name">Sevgilim</span>,
-            </p>
+        <!-- Forma Bölməsi (Login/Registration) -->
+        <main id="authFormSection" class="p-8 space-y-6 transition-transform duration-500 ease-in-out">
+            <h2 id="formTitle" class="text-2xl font-semibold text-center text-gray-100">Giriş</h2>
 
-            <p class="text-3xl md:text-4xl font-bold text-white mb-8 leading-snug">
-                Bilirəm ki, səhvlərim oldu. Lakin sən hələ də mənim üçün hər şeysən.
-            </p>
-            <p class="text-4xl md:text-5xl font-extrabold text-red-400 mb-10 leading-snug">
-                Xahiş edirəm, **Mənə Bir Şans Daha Verərsən**?
-            </p>
-
-            <!-- Düymələr -->
-            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                
-                <!-- Bəli Düyməsi (Əsas Hədəf) -->
-                <button onclick="acceptProposal()" class="w-full sm:w-auto px-10 py-4 text-xl font-bold rounded-full text-white bg-primary-color hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50">
-                    Bəli! Hər şeyə yenidən başlayaq!
+            <form id="authForm" class="space-y-4">
+                <div>
+                    <label for="email" class="sr-only">Email</label>
+                    <input type="email" id="email" placeholder="Email" required
+                           class="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Şifrə</label>
+                    <input type="password" id="password" placeholder="Şifrə" required
+                           class="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+                </div>
+                <button type="submit" id="submitBtn"
+                        class="w-full py-3 mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 ease-in-out">
+                    Daxil ol
                 </button>
-                
-                <!-- Xeyr Düyməsi (Hərəkət edən) -->
-                <button id="no-button" onmouseover="moveNoButton()" ontouchstart="moveNoButton()" class="w-full sm:w-auto px-8 py-4 text-lg rounded-full text-zinc-300 bg-zinc-700 hover:bg-zinc-600 transition duration-150 ease-in-out">
-                    Xeyr
+            </form>
+
+            <div class="text-center">
+                <p id="toggleText" class="text-sm text-gray-400">
+                    Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>
+                </p>
+            </div>
+        </main>
+
+        <!-- Əsas səhifə görünüşü -->
+        <main id="homeSection" class="hidden p-8 space-y-6">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-emerald-400">Xoş gəldiniz! 🎉</h2>
+                <p id="userEmailDisplay" class="text-lg text-gray-300 mt-2"></p>
+                <p class="text-sm text-gray-400">Bu sizin əsas səhifənizdir.</p>
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="logout()"
+                        class="py-3 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 ease-in-out">
+                    Çıxış
                 </button>
             </div>
-            
-        </div>
+        </main>
 
-        <!-- Uğur Mesajı (Gizli) - "Bəli" basıldıqda görünür -->
-        <div id="success-section" class="proposal-card bg-black p-8 md:p-12 rounded-3xl max-w-lg w-full text-center z-10 hidden transition duration-500 ease-in-out min-h-[50vh] flex flex-col justify-center items-center">
-            <div class="text-8xl mb-6 animate-pulse">
-                ❤️💫
+        <!-- Mesaj Qutusu -->
+        <div id="messageBox" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+            <div class="bg-gray-700 text-white p-6 rounded-xl shadow-2xl text-center max-w-xs w-full">
+                <p id="messageText" class="text-lg mb-4"></p>
+                <button onclick="hideMessage()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg">Bağla</button>
             </div>
-            <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4">
-                Yaxşı ki, Varsan!
-            </h2>
-            <p class="text-xl md:text-2xl text-red-400">
-                Mənə bu şansı verdiyin üçün təşəkkür edirəm. Sənə söz verirəm, bu dəfə hər şeyi daha düzgün edəcəyəm.
-            </p>
         </div>
-        
     </div>
 
     <script>
-        // Global variables for the heart effect
-        let heartInterval;
+        const app = document.getElementById('app');
+        const authFormSection = document.getElementById('authFormSection');
+        const homeSection = document.getElementById('homeSection');
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggleText = document.getElementById('toggleText');
+        const toggleLink = document.getElementById('toggleLink');
+        const pageTitle = document.getElementById('pageTitle');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
 
-        /**
-         * Başlanğıc funksiyası: Ürək effektini başladır və ad daxil etməyi təklif edir.
-         */
-        window.onload = () => {
-            // Adı soruşma (daha şəxsi etmək üçün)
-            const name = prompt("Təklif etdiyiniz sevdiyiniz insanın adını daxil edin (məsələn: Aygün):");
-            const partnerNameElement = document.getElementById('partner-name');
-            if (name && partnerNameElement) {
-                partnerNameElement.textContent = name;
-            } else if (partnerNameElement) {
-                partnerNameElement.textContent = "Sən"; // Ad daxil edilməsə 'Sən' yazsın
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+
+        let isLogin = true;
+
+        // Mesaj qutusunu göstər
+        function showMessage(msg) {
+            messageText.innerText = msg;
+            messageBox.classList.remove('hidden');
+            messageBox.classList.add('flex');
+        }
+
+        // Mesaj qutusunu gizlət
+        function hideMessage() {
+            messageBox.classList.remove('flex');
+            messageBox.classList.add('hidden');
+        }
+
+        // Formanın rejimini dəyişdir (login/qeydiyyat)
+        toggleLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            if (isLogin) {
+                formTitle.innerText = "Giriş";
+                submitBtn.innerText = "Daxil ol";
+                toggleText.innerHTML = `Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>`;
+            } else {
+                formTitle.innerText = "Qeydiyyat";
+                submitBtn.innerText = "Qeydiyyat et";
+                toggleText.innerHTML = `Artıq hesabın var? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Giriş et</a>`;
             }
+            // Səhifəni yenidən yükləməyin qarşısını almaq üçün event listener-ı yenidən təyin et
+            document.getElementById('toggleLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                isLogin = !isLogin;
+                updateFormUI();
+            });
+        });
 
-            // Ürək animasiyasını başlat
-            generateHearts();
-        };
-
-        /**
-         * Ürək animasiyasını yaradır.
-         */
-        function generateHearts() {
-            const container = document.getElementById('hearts-container');
-            
-            // Hər 500 ms-də yeni ürək yaradır
-            heartInterval = setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                
-                // Təsadüfi ölçü və yer
-                const size = Math.random() * 20 + 10; 
-                heart.style.width = `${size}px`;
-                heart.style.height = `${size}px`;
-                
-                const leftPosition = Math.random() * 100; 
-                heart.style.left = `${leftPosition}vw`;
-
-                // Təsadüfi animasiya müddəti
-                heart.style.animationDuration = `${Math.random() * 6 + 5}s`; 
-                
-                container.appendChild(heart);
-
-                // Ürəyi 12 saniyə sonra yox et
-                setTimeout(() => {
-                    heart.remove();
-                }, 12000); 
-
-            }, 500); 
-        }
-
-        /**
-         * "Xeyr" düyməsini istifadəçidən uzaqlaşdırır.
-         */
-        function moveNoButton() {
-            const noButton = document.getElementById('no-button');
-            
-            // Yeni təsadüfi yerin hesablanması
-            const maxMovement = 80; 
-            const newX = (Math.random() - 0.5) * maxMovement; 
-            const newY = (Math.random() - 0.5) * maxMovement; 
-
-            // Düyməni kiçik bir dəyişikliklə yerini dəyişdir
-            noButton.style.transform = `translate(${newX}px, ${newY}px) scale(0.8)`;
-            noButton.style.transition = 'transform 0.3s ease-out';
-            
-            // Bir mesaj göstər
-            showTemporaryMessage("Xahiş edirəm, cavabın 'Bəli' olsun! 🙏", 'no-button');
-            
-            // Transformasiyanı bir neçə saniyə sonra sıfırlayın ki, növbəti dəfə hərəkət edə bilsin
-            setTimeout(() => {
-                noButton.style.transform = `translate(0, 0) scale(1)`;
-            }, 2000);
-        }
-
-        /**
-         * Təklif qəbul edildikdə cavab göstərilir.
-         */
-        function acceptProposal() {
-            // Əsas təklif hissəsini gizlət
-            const proposalSection = document.getElementById('proposal-section');
-            const pageContainer = document.querySelector('.page-container');
-
-            // Uğur hissəsini göstər
-            const successSection = document.getElementById('success-section');
-            
-            // Səhifənin mərkəzlənməsini təmin etmək üçün
-            pageContainer.classList.add('min-h-screen'); 
-            
-            proposalSection.classList.add('hidden');
-            successSection.classList.remove('hidden');
-
-            // Ürək yaratma intervalını təmizlə və daha sürətli, daha böyük ürəklər başlat
-            clearInterval(heartInterval);
-            
-            // Qalibiyyət effekti
-            const container = document.getElementById('hearts-container');
-            container.innerHTML = ''; // Köhnə ürəkləri təmizlə
-            
-            let celebrationCount = 0;
-            const celebrationInterval = setInterval(() => {
-                const heart = document.createElement('div');
-                heart.classList.add('heart');
-                heart.style.animationDuration = `${Math.random() * 3 + 2}s`; // Daha sürətli
-                heart.style.opacity = 1;
-                
-                // Böyük və fərqli rənglər
-                const size = Math.random() * 40 + 20;
-                heart.style.width = `${size}px`;
-                heart.style.height = `${size}px`;
-                heart.style.background = Math.random() < 0.5 ? 'red' : 'pink';
-
-                // Təsadüfi yer
-                heart.style.left = `${Math.random() * 100}vw`;
-
-                container.appendChild(heart);
-                
-                setTimeout(() => heart.remove(), 5000);
-
-                celebrationCount++;
-                if (celebrationCount > 50) { 
-                    clearInterval(celebrationInterval);
-                }
-            }, 100);
-        }
-
-        /**
-         * Müvəqqəti mesaj göstərir (Alert yerinə)
-         */
-        function showTemporaryMessage(message, targetId) {
-            let msgElement = document.getElementById('temp-message');
-            if (!msgElement) {
-                msgElement = document.createElement('div');
-                msgElement.id = 'temp-message';
-                msgElement.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-yellow-500 text-white rounded-lg shadow-xl transition-opacity duration-300 z-50';
-                document.body.appendChild(msgElement);
+        // UI-ı güncəlləyən funksiya
+        function updateFormUI() {
+            if (isLogin) {
+                formTitle.innerText = "Giriş";
+                submitBtn.innerText = "Daxil ol";
+                toggleText.innerHTML = `Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>`;
+            } else {
+                formTitle.innerText = "Qeydiyyat";
+                submitBtn.innerText = "Qeydiyyat et";
+                toggleText.innerHTML = `Artıq hesabın var? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Giriş et</a>`;
             }
-            msgElement.textContent = message;
-            msgElement.style.opacity = '1';
-
-            setTimeout(() => {
-                msgElement.style.opacity = '0';
-            }, 2000);
+            // Səhifəni yenidən yükləməyin qarşısını almaq üçün event listener-ı yenidən təyin et
+            document.getElementById('toggleLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                isLogin = !isLogin;
+                updateFormUI();
+            });
         }
+
+        // Formanı təqdim etmə (submit) hadisəsi
+        document.getElementById('authForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (isLogin) {
+                login(email, password);
+            } else {
+                register(email, password);
+            }
+        });
+
+        // Qeydiyyat funksiyası
+        function register(email, password) {
+            let users = JSON.parse(localStorage.getItem('users')) || {};
+            if (users[email]) {
+                showMessage("Bu email artıq istifadə olunur!");
+            } else {
+                users[email] = password; // Sadə şifrə saxlamaq, realda bu təhlükəlidir
+                localStorage.setItem('users', JSON.stringify(users));
+                showMessage("Qeydiyyat uğurludur! İndi daxil ola bilərsiniz.");
+                isLogin = true;
+                updateFormUI();
+            }
+        }
+
+        // Login funksiyası
+        function login(email, password) {
+            let users = JSON.parse(localStorage.getItem('users')) || {};
+            if (users[email] && users[email] === password) {
+                localStorage.setItem('current_user', email);
+                checkAuth();
+            } else {
+                showMessage("Email və ya şifrə yanlışdır!");
+            }
+        }
+
+        // Çıxış funksiyası
+        function logout() {
+            localStorage.removeItem('current_user');
+            checkAuth();
+        }
+
+        // İstifadəçinin login vəziyyətini yoxla
+        function checkAuth() {
+            const currentUser = localStorage.getItem('current_user');
+            if (currentUser) {
+                authFormSection.classList.add('hidden');
+                homeSection.classList.remove('hidden');
+                userEmailDisplay.innerText = currentUser;
+                pageTitle.innerText = "Hesabınız";
+            } else {
+                authFormSection.classList.remove('hidden');
+                homeSection.classList.add('hidden');
+                pageTitle.innerText = "Xoş gəlmisiniz!";
+            }
+        }
+
+        // Səhifə yüklənəndə yoxla
+        document.addEventListener('DOMContentLoaded', checkAuth);
 
     </script>
 </body>
