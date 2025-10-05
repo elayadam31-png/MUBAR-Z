@@ -3,210 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masroxx Login & Qeydiyyat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Mobil Fokus Kilidi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #1a202c; /* Tünd fon rəngi */
-            color: #e2e8f0; /* Açıq mətn rəngi */
+            background-color: #0d1117; /* GitHub Dark Background */
+        }
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+        /* Custom timer display font for impact */
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.1rem;
         }
     </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2e7d32', /* Focus Green */
+                        'danger': '#b71c1c', /* Escape Red */
+                        'card': '#161b22',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- Əsas Kapsayıcı (Container) -->
-    <div id="app" class="w-full max-w-md bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+    <!-- Əsas Tətbiq Konteyneri -->
+    <div id="app" class="w-full max-w-md bg-card shadow-2xl rounded-xl p-6 md:p-8 text-white">
 
-        <!-- Başlıq -->
-        <header class="bg-gray-700 text-center py-6 px-4">
-            <h1 id="pageTitle" class="text-3xl font-bold text-white">Xoş gəlmisiniz!</h1>
-        </header>
+        <h1 class="text-3xl font-extrabold mb-6 text-center text-green-400">Fokus Kilidi 🔒</h1>
 
-        <!-- Forma Bölməsi (Login/Registration) -->
-        <main id="authFormSection" class="p-8 space-y-6 transition-transform duration-500 ease-in-out">
-            <h2 id="formTitle" class="text-2xl font-semibold text-center text-gray-100">Giriş</h2>
+        <!-- Quraşdırma Ekranı (Kilid Vurulmazdan Əvvəl) -->
+        <div id="setup-screen">
+            <p class="text-gray-400 mb-6 text-center">Diqqətinizi kilidləyin. Müddət bitənə qədər heç cür çıxa bilməyəcəksiniz. Çıxış yüksək sürtünmə tələb edir.</p>
 
-            <form id="authForm" class="space-y-4">
-                <div>
-                    <label for="email" class="sr-only">Email</label>
-                    <input type="email" id="email" placeholder="Email" required
-                           class="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
-                </div>
-                <div>
-                    <label for="password" class="sr-only">Şifrə</label>
-                    <input type="password" id="password" placeholder="Şifrə" required
-                           class="w-full px-4 py-3 bg-gray-700 text-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
-                </div>
-                <button type="submit" id="submitBtn"
-                        class="w-full py-3 mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 ease-in-out">
-                    Daxil ol
-                </button>
-            </form>
+            <div class="mb-6">
+                <label for="focus-time" class="block text-sm font-medium text-gray-300 mb-2">Fokus Müddəti (Dəqiqə)</label>
+                <input type="number" id="focus-time" value="30" min="1" class="w-full p-3 rounded-lg bg-gray-700 border-2 border-gray-600 focus:border-primary text-lg text-center font-bold appearance-none transition duration-150" aria-label="Fokus müddəti dəqiqə ilə">
+            </div>
 
-            <div class="text-center">
-                <p id="toggleText" class="text-sm text-gray-400">
-                    Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>
+            <button id="start-button" onclick="startLock()" class="w-full py-4 rounded-xl text-xl font-bold bg-primary hover:bg-green-700 transition duration-300 shadow-lg shadow-green-900/50">
+                Fokusu Başlat və Kilid Vur
+            </button>
+            <p id="error-message" class="text-danger text-center mt-3 hidden"></p>
+        </div>
+
+        <!-- Kilid Ekranı (Kilid Vurulduqdan Sonra) -->
+        <div id="lock-screen" class="hidden text-center">
+            <p class="text-2xl font-bold text-red-500 mb-4 animate-pulse">KİLİD VURULDU! ÇIXIŞ YOXDUR.</p>
+
+            <!-- Geri Sayım Taymeri -->
+            <div class="bg-gray-800 p-8 rounded-2xl mb-8 shadow-inner shadow-gray-900">
+                <p class="text-sm font-medium text-gray-400 mb-2">Qalan Müddət</p>
+                <div id="timer-display" class="timer-display text-7xl font-black text-green-400">00:00:00</div>
+            </div>
+
+            <p class="text-lg text-gray-300 mb-4">Müddət bitənə qədər bu tapşırığa davam edin.</p>
+
+            <button id="exit-attempt-button" onclick="showEscapeModal()" class="w-full py-3 rounded-xl text-lg font-bold bg-danger hover:bg-red-700 transition duration-300 shadow-lg shadow-red-900/50">
+                Məcburi Çıxışa Cəhd Et
+            </button>
+            <p id="exit-attempts-counter" class="text-sm text-gray-500 mt-4">Məcburi Çıxış Cəhdləri: <span id="attempt-count" class="font-bold text-red-400">0</span></p>
+        </div>
+
+        <!-- Uğurlu Bitmə Ekranı -->
+        <div id="success-screen" class="hidden text-center">
+            <svg class="w-20 h-20 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-3xl font-bold text-green-400 mb-2">Təbrik edirik!</h2>
+            <p class="text-gray-400 mb-6">Fokus sessiyanızı uğurla tamamladınız. Heç cür çıxa bilmədiniz və işinizi bitirdiniz!</p>
+            <button onclick="resetApp()" class="py-3 px-6 rounded-xl font-bold bg-gray-700 hover:bg-gray-600 transition duration-300">Yeni Sessiyaya Başla</button>
+        </div>
+    </div>
+
+    <!-- Məcburi Çıxış Modalı (Yüksək Sürtünmə) -->
+    <div id="escape-modal" class="modal-overlay fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-card rounded-2xl p-6 w-full max-w-md shadow-2xl border-2 border-danger">
+            <h2 class="text-2xl font-bold text-danger mb-4">Kiliddən Çıxmaq İstəyirsiniz?</h2>
+            <p class="text-gray-400 mb-4">Bu, fokusunuzu pozmaq deməkdir. Əgər həqiqətən çıxmaq istəyirsinizsə, aşağıdakı uzun cümləni tamamilə **səhvsiz** yazmalısınız. Bu, **cəzanızdır**.</p>
+
+            <div class="bg-gray-900 p-4 rounded-lg mb-4">
+                <p id="required-phrase" class="text-sm text-red-400 font-mono italic select-all">
+                    Mən başa düşürəm ki, bu tapşırığa tamamilə diqqət yetirməliyəm və əgər çıxsam, öyrənmə müddətimi və intizamımı pozmuş olaram. Bu mənim zərərimədir.
                 </p>
             </div>
-        </main>
 
-        <!-- Əsas səhifə görünüşü -->
-        <main id="homeSection" class="hidden p-8 space-y-6">
-            <div class="text-center">
-                <h2 class="text-3xl font-bold text-emerald-400">Xoş gəldiniz! 🎉</h2>
-                <p id="userEmailDisplay" class="text-lg text-gray-300 mt-2"></p>
-                <p class="text-sm text-gray-400">Bu sizin əsas səhifənizdir.</p>
-            </div>
-            <div class="mt-8 text-center">
-                <button onclick="logout()"
-                        class="py-3 px-6 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg transition-all duration-300 ease-in-out">
-                    Çıxış
-                </button>
-            </div>
-        </main>
+            <textarea id="escape-input" rows="4" class="w-full p-3 rounded-lg bg-gray-700 border-2 border-gray-600 focus:border-danger text-white resize-none" placeholder="Yuxarıdakı cümləni bura yazın..."></textarea>
 
-        <!-- Mesaj Qutusu -->
-        <div id="messageBox" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
-            <div class="bg-gray-700 text-white p-6 rounded-xl shadow-2xl text-center max-w-xs w-full">
-                <p id="messageText" class="text-lg mb-4"></p>
-                <button onclick="hideMessage()" class="px-6 py-2 bg-emerald-600 hover:bg-emerald-700 rounded-lg">Bağla</button>
-            </div>
+            <button onclick="attemptEscape()" class="w-full py-3 mt-4 rounded-xl text-lg font-bold bg-danger hover:bg-red-700 transition duration-300">
+                Yazıb Çıxmağa Cəhd Et
+            </button>
+            <button onclick="hideEscapeModal()" class="w-full py-3 mt-2 rounded-xl text-sm text-gray-400 hover:text-white transition duration-300">
+                Geri Dön və Fokusa Davam Et
+            </button>
+            <p id="escape-error" class="text-yellow-400 text-center mt-3 hidden text-sm font-medium">Yazı səhvdir! Yenidən cəhd edin.</p>
         </div>
     </div>
 
     <script>
-        const app = document.getElementById('app');
-        const authFormSection = document.getElementById('authFormSection');
-        const homeSection = document.getElementById('homeSection');
-        const formTitle = document.getElementById('formTitle');
-        const submitBtn = document.getElementById('submitBtn');
-        const toggleText = document.getElementById('toggleText');
-        const toggleLink = document.getElementById('toggleLink');
-        const pageTitle = document.getElementById('pageTitle');
-        const userEmailDisplay = document.getElementById('userEmailDisplay');
+        // Firebase və LLM əməliyyatları üçün istifadə olunmur, yalnız yerli funksionallıq
+        let timerInterval;
+        let remainingSeconds = 0;
+        let isLocked = false;
+        let escapeAttempts = 0;
 
-        const messageBox = document.getElementById('messageBox');
-        const messageText = document.getElementById('messageText');
+        const setupScreen = document.getElementById('setup-screen');
+        const lockScreen = document.getElementById('lock-screen');
+        const successScreen = document.getElementById('success-screen');
+        const timerDisplay = document.getElementById('timer-display');
+        const focusTimeInput = document.getElementById('focus-time');
+        const escapeModal = document.getElementById('escape-modal');
+        const escapeInput = document.getElementById('escape-input');
+        const errorMessage = document.getElementById('error-message');
+        const attemptCountSpan = document.getElementById('attempt-count');
+        const requiredPhrase = document.getElementById('required-phrase').textContent.trim();
+        const escapeError = document.getElementById('escape-error');
 
-        let isLogin = true;
 
-        // Mesaj qutusunu göstər
-        function showMessage(msg) {
-            messageText.innerText = msg;
-            messageBox.classList.remove('hidden');
-            messageBox.classList.add('flex');
+        // Taymeri HH:MM:SS formatında göstərir
+        function formatTime(totalSeconds) {
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return [hours, minutes, seconds]
+                .map(v => v < 10 ? '0' + v : v)
+                .join(':');
         }
 
-        // Mesaj qutusunu gizlət
-        function hideMessage() {
-            messageBox.classList.remove('flex');
-            messageBox.classList.add('hidden');
+        // Tətbiqi sıfırlayır (Vaxt bitdikdə və ya məcburi çıxışdan sonra)
+        function resetApp() {
+            clearInterval(timerInterval);
+            isLocked = false;
+            remainingSeconds = 0;
+            escapeAttempts = 0;
+            attemptCountSpan.textContent = 0;
+            focusTimeInput.value = 30; // Varsayılan dəyəri bərpa et
+            setupScreen.classList.remove('hidden');
+            lockScreen.classList.add('hidden');
+            successScreen.classList.add('hidden');
+            escapeModal.classList.add('hidden');
+            escapeInput.value = '';
+            escapeError.classList.add('hidden');
         }
 
-        // Formanın rejimini dəyişdir (login/qeydiyyat)
-        toggleLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            isLogin = !isLogin;
-            if (isLogin) {
-                formTitle.innerText = "Giriş";
-                submitBtn.innerText = "Daxil ol";
-                toggleText.innerHTML = `Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>`;
-            } else {
-                formTitle.innerText = "Qeydiyyat";
-                submitBtn.innerText = "Qeydiyyat et";
-                toggleText.innerHTML = `Artıq hesabın var? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Giriş et</a>`;
+        // 1 saniyəlik taymer funksiyası
+        function updateTimer() {
+            if (remainingSeconds <= 0) {
+                clearInterval(timerInterval);
+                isLocked = false;
+                lockScreen.classList.add('hidden');
+                successScreen.classList.remove('hidden');
+                // Fokus sessiyası uğurla tamamlandı!
+                return;
             }
-            // Səhifəni yenidən yükləməyin qarşısını almaq üçün event listener-ı yenidən təyin et
-            document.getElementById('toggleLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                isLogin = !isLogin;
-                updateFormUI();
+
+            remainingSeconds--;
+            timerDisplay.textContent = formatTime(remainingSeconds);
+        }
+
+        // Fokusu başlat və kilid vur
+        function startLock() {
+            const focusMinutes = parseInt(focusTimeInput.value);
+
+            if (isNaN(focusMinutes) || focusMinutes <= 0) {
+                errorMessage.textContent = "Zəhmət olmasa müsbət bir dəqiqə dəyəri daxil edin.";
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+            errorMessage.classList.add('hidden');
+
+            remainingSeconds = focusMinutes * 60;
+            isLocked = true;
+
+            setupScreen.classList.add('hidden');
+            lockScreen.classList.remove('hidden');
+            timerDisplay.textContent = formatTime(remainingSeconds);
+
+            // Taymeri başlat
+            timerInterval = setInterval(updateTimer, 1000);
+
+            // Təsadüfi olaraq brauzerin geri düyməsi və ya tətbiqdən çıxış cəhdini izləmək üçün
+            // Bu, yalnız bir xəbərdarlıq funksiyasıdır, çünki brauzerin sistem çıxışını tam bloklamaq mümkün deyil.
+            window.onbeforeunload = function() {
+                if (isLocked) {
+                    // Bu mətn brauzerdən asılı olaraq göstərilə bilər və ya göstərilməyə bilər
+                    return "Diqqət! Fokus Kilidi aktivdir. Çıxmaq istədiyinizə əminsinizmi?";
+                }
+            };
+        }
+
+        // Məcburi çıxış pəncərəsini göstər
+        function showEscapeModal() {
+            if (!isLocked) return;
+            escapeModal.classList.remove('hidden');
+            // Cəhd sayını artır
+            escapeAttempts++;
+            attemptCountSpan.textContent = escapeAttempts;
+            escapeInput.value = '';
+            escapeError.classList.add('hidden');
+            escapeInput.focus();
+        }
+
+        // Məcburi çıxış pəncərəsini gizlət
+        function hideEscapeModal() {
+            escapeModal.classList.add('hidden');
+        }
+
+        // Kiliddən çıxmağa cəhd et (Yüksək Sürtünmə hissəsi)
+        function attemptEscape() {
+            const enteredText = escapeInput.value.trim();
+
+            if (enteredText === requiredPhrase) {
+                // Uğurlu çıxış!
+                clearInterval(timerInterval);
+                isLocked = false;
+                alertMessage("Diqqət pozuldu! Kiliddən uğurla çıxdınız. Fokus sessiyası ləğv edildi.", 'success');
+                resetApp();
+            } else {
+                // Uğursuz çıxış cəhdi
+                escapeError.classList.remove('hidden');
+                escapeInput.value = '';
+                // Taymerdən 1 dəqiqə cəza kəsilir (sürtünməni artırmaq üçün)
+                remainingSeconds = Math.max(0, remainingSeconds + 60); // 1 dəqiqə əlavə edildi
+                timerDisplay.textContent = formatTime(remainingSeconds);
+
+                alertMessage(`Səhv yazı. Fokusunuzu pozduğunuz üçün ${formatTime(60)} əlavə edildi!`, 'warning');
+            }
+        }
+
+        // Fərdiləşdirilmiş Bildiriş Qutusu (alert() əvəzinə)
+        function alertMessage(message, type) {
+            const oldAlert = document.getElementById('custom-alert');
+            if(oldAlert) oldAlert.remove();
+
+            const bgColor = type === 'success' ? 'bg-green-600' : (type === 'warning' ? 'bg-red-600' : 'bg-blue-600');
+
+            const alertDiv = document.createElement('div');
+            alertDiv.id = 'custom-alert';
+            alertDiv.className = `fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-xl shadow-xl text-white font-semibold z-50 transition-opacity duration-300 ${bgColor}`;
+            alertDiv.textContent = message;
+
+            document.body.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.classList.add('opacity-0');
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 5000);
+        }
+
+        // Tətbiqi ilkləşdirmə
+        window.onload = function() {
+            resetApp();
+            // İstifadəçi təsadüfi olaraq tətbiqdən çıxdıqda
+            window.addEventListener('blur', () => {
+                 if (isLocked) {
+                    alertMessage("Geri qayıt! Fokus Kilidi aktivdir!", 'warning');
+                 }
             });
-        });
-
-        // UI-ı güncəlləyən funksiya
-        function updateFormUI() {
-            if (isLogin) {
-                formTitle.innerText = "Giriş";
-                submitBtn.innerText = "Daxil ol";
-                toggleText.innerHTML = `Hesabın yoxdur? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Qeydiyyat et</a>`;
-            } else {
-                formTitle.innerText = "Qeydiyyat";
-                submitBtn.innerText = "Qeydiyyat et";
-                toggleText.innerHTML = `Artıq hesabın var? <a href="#" id="toggleLink" class="text-emerald-400 font-semibold hover:text-emerald-300">Giriş et</a>`;
-            }
-            // Səhifəni yenidən yükləməyin qarşısını almaq üçün event listener-ı yenidən təyin et
-            document.getElementById('toggleLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                isLogin = !isLogin;
-                updateFormUI();
-            });
-        }
-
-        // Formanı təqdim etmə (submit) hadisəsi
-        document.getElementById('authForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            if (isLogin) {
-                login(email, password);
-            } else {
-                register(email, password);
-            }
-        });
-
-        // Qeydiyyat funksiyası
-        function register(email, password) {
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-            if (users[email]) {
-                showMessage("Bu email artıq istifadə olunur!");
-            } else {
-                users[email] = password; // Sadə şifrə saxlamaq, realda bu təhlükəlidir
-                localStorage.setItem('users', JSON.stringify(users));
-                showMessage("Qeydiyyat uğurludur! İndi daxil ola bilərsiniz.");
-                isLogin = true;
-                updateFormUI();
-            }
-        }
-
-        // Login funksiyası
-        function login(email, password) {
-            let users = JSON.parse(localStorage.getItem('users')) || {};
-            if (users[email] && users[email] === password) {
-                localStorage.setItem('current_user', email);
-                checkAuth();
-            } else {
-                showMessage("Email və ya şifrə yanlışdır!");
-            }
-        }
-
-        // Çıxış funksiyası
-        function logout() {
-            localStorage.removeItem('current_user');
-            checkAuth();
-        }
-
-        // İstifadəçinin login vəziyyətini yoxla
-        function checkAuth() {
-            const currentUser = localStorage.getItem('current_user');
-            if (currentUser) {
-                authFormSection.classList.add('hidden');
-                homeSection.classList.remove('hidden');
-                userEmailDisplay.innerText = currentUser;
-                pageTitle.innerText = "Hesabınız";
-            } else {
-                authFormSection.classList.remove('hidden');
-                homeSection.classList.add('hidden');
-                pageTitle.innerText = "Xoş gəlmisiniz!";
-            }
-        }
-
-        // Səhifə yüklənəndə yoxla
-        document.addEventListener('DOMContentLoaded', checkAuth);
-
+        };
     </script>
+
 </body>
 </html>
+
