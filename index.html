@@ -1,275 +1,353 @@
+Hyper SaaS :
 <!DOCTYPE html>
-<html lang="az">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mobil Fokus Kilidi</title>
+    <title>Hyper-SaaS Değer Analizörü</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117; /* GitHub Dark Background */
-        }
-        .modal-overlay {
-            background-color: rgba(0, 0, 0, 0.95);
-        }
-        /* Custom timer display font for impact */
-        .timer-display {
-            font-variant-numeric: tabular-nums;
-            letter-spacing: 0.1rem;
-        }
+        :root { color-scheme: dark; }
+        body { font-family: 'Inter', sans-serif; background-color: #121223; color: #e9e9f3; }
+        .card { background-color: #1a1a30; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #3a3a5a; }
+        .tab-button { background-color: #2b2b4e; color: #b0b0d0; transition: all 0.2s; }
+        .tab-button.active { background-color: #5a5a8f; color: #fff; font-weight: 600; }
+        .code-block { background-color: #0d0d18; border: 1px solid #3a3a5a; }
+        .score-box { font-size: 1.5rem; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.5rem; display:inline-block;}
+        .spinner { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #fff; border-radius: 50%; width: 1.5rem; height: 1.5rem; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#2e7d32', /* Focus Green */
-                        'danger': '#b71c1c', /* Escape Red */
-                        'card': '#161b22',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
 
-    <!-- Əsas Tətbiq Konteyneri -->
-    <div id="app" class="w-full max-w-md bg-card shadow-2xl rounded-xl p-6 md:p-8 text-white">
+<div id="app" class="min-h-screen p-4 sm:p-8 flex flex-col items-center">
+    <header class="w-full max-w-7xl mb-8">
+        <h1 class="text-4xl font-extrabold text-indigo-400 flex items-center">
+            <i data-lucide="gauge" class="mr-3 w-8 h-8 text-red-400"></i> Hyper-SaaS Değer Analizörü
+        </h1>
+        <p class="text-gray-400 mt-2">Günlük MVP hedefinize uygunluk puanı ve anında para kazanma stratejisi ile fark yaratın.</p>
+        <p id="user-info" class="text-xs text-indigo-300 mt-2 font-mono">Kullanıcı ID: Yükleniyor...</p>
+    </header>
 
-        <h1 class="text-3xl font-extrabold mb-6 text-center text-green-400">Fokus Kilidi 🔒</h1>
-
-        <!-- Quraşdırma Ekranı (Kilid Vurulmazdan Əvvəl) -->
-        <div id="setup-screen">
-            <p class="text-gray-400 mb-6 text-center">Diqqətinizi kilidləyin. Müddət bitənə qədər heç cür çıxa bilməyəcəksiniz. Çıxış yüksək sürtünmə tələb edir.</p>
-
-            <div class="mb-6">
-                <label for="focus-time" class="block text-sm font-medium text-gray-300 mb-2">Fokus Müddəti (Dəqiqə)</label>
-                <input type="number" id="focus-time" value="30" min="1" class="w-full p-3 rounded-lg bg-gray-700 border-2 border-gray-600 focus:border-primary text-lg text-center font-bold appearance-none transition duration-150" aria-label="Fokus müddəti dəqiqə ilə">
+    <main class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Fikir Girişi -->
+        <section class="lg:col-span-1 space-y-6">
+            <div class="card p-6 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4 text-gray-200 flex items-center">
+                    <i data-lucide="sparkles" class="mr-2 w-5 h-5 text-yellow-400"></i> 1. Fikri Analiz Et
+                </h2>
+                <textarea id="idea-input" rows="5" class="w-full p-3 border border-gray-600 bg-gray-800 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white" placeholder="Fikrinizi girin (Örn: Bir resimdeki renk paletini tek tıkla kopyalayan araç)."></textarea>
+                <button id="generate-button" class="w-full mt-4 bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-50" onclick="handleIdeaGeneration()">
+                    <span id="button-text">Değer Analizi Yap & Dosyaları Üret</span>
+                    <div id="loader" class="spinner ml-3 hidden"></div>
+                </button>
+                <div id="error-message" class="mt-4 p-3 bg-red-900 rounded-lg text-sm hidden"></div>
             </div>
 
-            <button id="start-button" onclick="startLock()" class="w-full py-4 rounded-xl text-xl font-bold bg-primary hover:bg-green-700 transition duration-300 shadow-lg shadow-green-900/50">
-                Fokusu Başlat və Kilid Vur
-            </button>
-            <p id="error-message" class="text-danger text-center mt-3 hidden"></p>
-        </div>
-
-        <!-- Kilid Ekranı (Kilid Vurulduqdan Sonra) -->
-        <div id="lock-screen" class="hidden text-center">
-            <p class="text-2xl font-bold text-red-500 mb-4 animate-pulse">KİLİD VURULDU! ÇIXIŞ YOXDUR.</p>
-
-            <!-- Geri Sayım Taymeri -->
-            <div class="bg-gray-800 p-8 rounded-2xl mb-8 shadow-inner shadow-gray-900">
-                <p class="text-sm font-medium text-gray-400 mb-2">Qalan Müddət</p>
-                <div id="timer-display" class="timer-display text-7xl font-black text-green-400">00:00:00</div>
+            <!-- Dağıtım Geçmişi -->
+            <div class="card p-6 rounded-xl">
+                <h2 class="text-xl font-semibold mb-4 text-gray-200 flex items-center">
+                    <i data-lucide="history" class="mr-2 w-5 h-5 text-indigo-400"></i> Dağıtım Kayıtları
+                </h2>
+                <div id="history-list" class="space-y-3 max-h-72 overflow-y-auto">
+                    <p class="text-gray-500 text-sm" id="history-loading">Geçmiş yükleniyor...</p>
+                </div>
+                <button id="save-button" class="w-full mt-6 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-50" onclick="saveMvpIdea()" disabled>
+                    <i data-lucide="archive" class="w-5 h-5 mr-2"></i> 4. Dağıtıldı Olarak Kaydet
+                </button>
             </div>
+        </section>
 
-            <p class="text-lg text-gray-300 mb-4">Müddət bitənə qədər bu tapşırığa davam edin.</p>
+        <!-- Çıktılar -->
+        <section class="lg:col-span-3 space-y-6">
+            <div id="draft-output-card" class="card p-6 rounded-xl hidden">
+                <h2 class="text-2xl font-bold mb-4 text-green-400 flex items-center">
+                    <i data-lucide="briefcase-business" class="mr-2 w-6 h-6"></i> 2. Fikir Skor Kartı & Plan
+                </h2>
+                
+                <!-- Puan ve Niş Bilgileri -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-indigo-900/50 p-4 rounded-xl border border-indigo-700">
+                        <p class="text-sm text-gray-400">MVP Adı:</p>
+                        <p class="text-lg font-bold text-indigo-300" id="mvp-name"></p>
+                    </div>
+                    <div class="bg-green-900/50 p-4 rounded-xl border border-green-700">
+                        <p class="text-sm text-gray-400">Hız/Uygunluk Puanı (1-10):</p>
+                        <div class="score-box text-green-400" id="feasibility-score"></div>
+                    </div>
+                    <div class="bg-yellow-900/50 p-4 rounded-xl border border-yellow-700">
+                        <p class="text-sm text-gray-400">Hedef Niş:</p>
+                        <p class="text-lg font-bold text-yellow-300" id="niche-appeal"></p>
+                    </div>
+                </div>
 
-            <button id="exit-attempt-button" onclick="showEscapeModal()" class="w-full py-3 rounded-xl text-lg font-bold bg-danger hover:bg-red-700 transition duration-300 shadow-lg shadow-red-900/50">
-                Məcburi Çıxışa Cəhd Et
-            </button>
-            <p id="exit-attempts-counter" class="text-sm text-gray-500 mt-4">Məcburi Çıxış Cəhdləri: <span id="attempt-count" class="font-bold text-red-400">0</span></p>
-        </div>
+                <!-- DÜZELTME YAPILAN YER: Temel Değer Önerisi Eklendi -->
+                <div class="bg-gray-800 p-4 rounded-xl mb-6 border border-gray-700">
+                    <h3 class="text-lg font-bold text-indigo-400 mb-1 flex items-center">
+                        <i data-lucide="flag" class="mr-2 w-5 h-5"></i> Temel Değer Önerisi (Core Value Prop)
+                    </h3>
+                    <p class="text-sm text-gray-300" id="mvp-value-prop"></p> 
+                </div>
+                
+                <!-- Para Kazanma Stratejisi -->
+                <div class="bg-gray-800 p-4 rounded-xl mb-6 border border-gray-700">
+                    <h3 class="text-lg font-bold text-red-400 mb-2 flex items-center">
+                        <i data-lucide="dollar-sign" class="mr-2 w-5 h-5"></i> Önerilen Para Kazanma Stratejisi
+                    </h3>
+                    <p class="text-sm text-gray-300" id="monetization-plan"></p>
+                </div>
 
-        <!-- Uğurlu Bitmə Ekranı -->
-        <div id="success-screen" class="hidden text-center">
-            <svg class="w-20 h-20 mx-auto text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h2 class="text-3xl font-bold text-green-400 mb-2">Təbrik edirik!</h2>
-            <p class="text-gray-400 mb-6">Fokus sessiyanızı uğurla tamamladınız. Heç cür çıxa bilmədiniz və işinizi bitirdiniz!</p>
-            <button onclick="resetApp()" class="py-3 px-6 rounded-xl font-bold bg-gray-700 hover:bg-gray-600 transition duration-300">Yeni Sessiyaya Başla</button>
-        </div>
-    </div>
+                <h2 class="text-2xl font-bold mb-4 text-white flex items-center">
+                    <i data-lucide="code-square" class="mr-2 w-6 h-6"></i> 3. Dağıtıma Hazır Dosyalar
+                </h2>
 
-    <!-- Məcburi Çıxış Modalı (Yüksək Sürtünmə) -->
-    <div id="escape-modal" class="modal-overlay fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-card rounded-2xl p-6 w-full max-w-md shadow-2xl border-2 border-danger">
-            <h2 class="text-2xl font-bold text-danger mb-4">Kiliddən Çıxmaq İstəyirsiniz?</h2>
-            <p class="text-gray-400 mb-4">Bu, fokusunuzu pozmaq deməkdir. Əgər həqiqətən çıxmaq istəyirsinizsə, aşağıdakı uzun cümləni tamamilə **səhvsiz** yazmalısınız. Bu, **cəzanızdır**.</p>
+                <div class="flex space-x-2 border-b border-gray-700 mb-4">
+                    <button id="tab-html" class="tab-button active px-4 py-2 rounded-t-lg font-medium text-sm transition" onclick="showFile('html')">
+                        <i data-lucide="file-code" class="inline w-4 h-4 mr-1"></i> MVP Uygulaması (.html)
+                    </button>
+                    <button id="tab-readme" class="tab-button px-4 py-2 rounded-t-lg font-medium text-sm transition" onclick="showFile('readme')">
+                        <i data-lucide="book-open" class="inline w-4 h-4 mr-1"></i> Pazarlama/README (.md)
+                    </button>
+                </div>
 
-            <div class="bg-gray-900 p-4 rounded-lg mb-4">
-                <p id="required-phrase" class="text-sm text-red-400 font-mono italic select-all">
-                    Mən başa düşürəm ki, bu tapşırığa tamamilə diqqət yetirməliyəm və əgər çıxsam, öyrənmə müddətimi və intizamımı pozmuş olaram. Bu mənim zərərimədir.
-                </p>
+                <div id="file-content-container">
+                    <div id="html-content" class="file-panel">
+                        <button class="copy-button bg-indigo-500 hover:bg-indigo-600 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('html')">Kopyala</button>
+                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-green-200"><code id="mvp-html-code"></code></pre>
+                    </div>
+                    <div id="readme-content" class="file-panel hidden">
+                        <button class="copy-button bg-indigo-500 hover:bg-indigo-600 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('readme')">Kopyala</button>
+                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-yellow-200"><code id="mvp-readme-code"></code></pre>
+                    </div>
+                </div>
             </div>
+        </section>
+    </main>
+</div>
 
-            <textarea id="escape-input" rows="4" class="w-full p-3 rounded-lg bg-gray-700 border-2 border-gray-600 focus:border-danger text-white resize-none" placeholder="Yuxarıdakı cümləni bura yazın..."></textarea>
+<!-- Firebase + Gemini Logic -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, addDoc, onSnapshot, collection, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            <button onclick="attemptEscape()" class="w-full py-3 mt-4 rounded-xl text-lg font-bold bg-danger hover:bg-red-700 transition duration-300">
-                Yazıb Çıxmağa Cəhd Et
-            </button>
-            <button onclick="hideEscapeModal()" class="w-full py-3 mt-2 rounded-xl text-sm text-gray-400 hover:text-white transition duration-300">
-                Geri Dön və Fokusa Davam Et
-            </button>
-            <p id="escape-error" class="text-yellow-400 text-center mt-3 hidden text-sm font-medium">Yazı səhvdir! Yenidən cəhd edin.</p>
-        </div>
-    </div>
+let db, auth, userId = null;
+const APP_COLLECTION_NAME = 'saas_factory_v2_ideas';
+const apiKey = ""; // Gemini API key
+let lastGeneratedDraft = null;
 
-    <script>
-        // Firebase və LLM əməliyyatları üçün istifadə olunmur, yalnız yerli funksionallıq
-        let timerInterval;
-        let remainingSeconds = 0;
-        let isLocked = false;
-        let escapeAttempts = 0;
+window.handleIdeaGeneration = handleIdeaGeneration;
+window.saveMvpIdea = saveMvpIdea;
+window.showFile = showFile;
+window.copyContent = copyContent;
 
-        const setupScreen = document.getElementById('setup-screen');
-        const lockScreen = document.getElementById('lock-screen');
-        const successScreen = document.getElementById('success-screen');
-        const timerDisplay = document.getElementById('timer-display');
-        const focusTimeInput = document.getElementById('focus-time');
-        const escapeModal = document.getElementById('escape-modal');
-        const escapeInput = document.getElementById('escape-input');
-        const errorMessage = document.getElementById('error-message');
-        const attemptCountSpan = document.getElementById('attempt-count');
-        const requiredPhrase = document.getElementById('required-phrase').textContent.trim();
-        const escapeError = document.getElementById('escape-error');
+const ideaInput = document.getElementById('idea-input');
+const generateButton = document.getElementById('generate-button');
+const loader = document.getElementById('loader');
+const buttonText = document.getElementById('button-text');
+const draftOutputCard = document.getElementById('draft-output-card');
+const errorMsg = document.getElementById('error-message');
+const historyList = document.getElementById('history-list');
+const userInfo = document.getElementById('user-info');
+const saveButton = document.getElementById('save-button');
 
+// Firestore initialization variables
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        // Taymeri HH:MM:SS formatında göstərir
-        function formatTime(totalSeconds) {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-            return [hours, minutes, seconds]
-                .map(v => v < 10 ? '0' + v : v)
-                .join(':');
+if (firebaseConfig) {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    auth = getAuth(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) userId = user.uid;
+        else {
+            await signInAnonymously(auth);
+            userId = auth.currentUser?.uid || crypto.randomUUID();
         }
+        userInfo.textContent = `Kullanıcı ID: ${userId.substring(0,8)}... (Tam ID: ${userId})`;
+        setupFirestoreListener();
+        lucide.createIcons();
+    });
 
-        // Tətbiqi sıfırlayır (Vaxt bitdikdə və ya məcburi çıxışdan sonra)
-        function resetApp() {
-            clearInterval(timerInterval);
-            isLocked = false;
-            remainingSeconds = 0;
-            escapeAttempts = 0;
-            attemptCountSpan.textContent = 0;
-            focusTimeInput.value = 30; // Varsayılan dəyəri bərpa et
-            setupScreen.classList.remove('hidden');
-            lockScreen.classList.add('hidden');
-            successScreen.classList.add('hidden');
-            escapeModal.classList.add('hidden');
-            escapeInput.value = '';
-            escapeError.classList.add('hidden');
+    if (initialAuthToken) {
+        signInWithCustomToken(auth, initialAuthToken).catch(() => signInAnonymously(auth));
+    } else signInAnonymously(auth);
+} else {
+    console.error("Firebase yapılandırması bulunamadı.");
+    historyList.innerHTML = '<p class="text-red-500">Firebase yapılandırması yüklenemedi.</p>';
+}
+
+function getCollectionPath() {
+    // Using the dynamically provided appId variable
+    return `artifacts/${appId}/users/${userId}/${APP_COLLECTION_NAME}`;
+}
+
+function setupFirestoreListener() {
+    const path = getCollectionPath();
+    if (!path) return;
+    const q = query(collection(db, path));
+    onSnapshot(q, (snapshot) => {
+        historyList.innerHTML = '';
+        if (snapshot.empty) {
+            historyList.innerHTML = '<p class="text-gray-500">Henüz dağıtılmış bir fikir yok. Fabrikayı çalıştırın!</p>';
+            return;
         }
+        const ideas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+            .sort((a,b)=> (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+        ideas.forEach(idea=>{
+            const item = document.createElement('div');
+            item.className='p-3 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition duration-150';
+            const scoreColor = idea.feasibilityScore>=7?'text-green-400':idea.feasibilityScore>=4?'text-yellow-400':'text-red-400';
+            item.innerHTML=`<p class="font-semibold text-sm text-indigo-300">${idea.mvpName||'İsimsiz MVP'}</p>
+                <p class="text-xs text-gray-400 mt-0.5">${idea.nicheAppeal||'Niş Belirtilmemiş'}</p>
+                <p class="text-xs ${scoreColor} mt-1">Puan: ${idea.feasibilityScore||'?'}/10</p>`;
+            historyList.appendChild(item);
+        });
+    }, (err)=>{console.error("Firestore Error:", err); historyList.innerHTML='<p class="text-red-500">Geçmiş yüklenirken hata oluştu.</p>';});
+}
 
-        // 1 saniyəlik taymer funksiyası
-        function updateTimer() {
-            if (remainingSeconds <= 0) {
-                clearInterval(timerInterval);
-                isLocked = false;
-                lockScreen.classList.add('hidden');
-                successScreen.classList.remove('hidden');
-                // Fokus sessiyası uğurla tamamlandı!
-                return;
-            }
-
-            remainingSeconds--;
-            timerDisplay.textContent = formatTime(remainingSeconds);
-        }
-
-        // Fokusu başlat və kilid vur
-        function startLock() {
-            const focusMinutes = parseInt(focusTimeInput.value);
-
-            if (isNaN(focusMinutes) || focusMinutes <= 0) {
-                errorMessage.textContent = "Zəhmət olmasa müsbət bir dəqiqə dəyəri daxil edin.";
-                errorMessage.classList.remove('hidden');
-                return;
-            }
-            errorMessage.classList.add('hidden');
-
-            remainingSeconds = focusMinutes * 60;
-            isLocked = true;
-
-            setupScreen.classList.add('hidden');
-            lockScreen.classList.remove('hidden');
-            timerDisplay.textContent = formatTime(remainingSeconds);
-
-            // Taymeri başlat
-            timerInterval = setInterval(updateTimer, 1000);
-
-            // Təsadüfi olaraq brauzerin geri düyməsi və ya tətbiqdən çıxış cəhdini izləmək üçün
-            // Bu, yalnız bir xəbərdarlıq funksiyasıdır, çünki brauzerin sistem çıxışını tam bloklamaq mümkün deyil.
-            window.onbeforeunload = function() {
-                if (isLocked) {
-                    // Bu mətn brauzerdən asılı olaraq göstərilə bilər və ya göstərilməyə bilər
-                    return "Diqqət! Fokus Kilidi aktivdir. Çıxmaq istədiyinizə əminsinizmi?";
-                }
-            };
-        }
-
-        // Məcburi çıxış pəncərəsini göstər
-        function showEscapeModal() {
-            if (!isLocked) return;
-            escapeModal.classList.remove('hidden');
-            // Cəhd sayını artır
-            escapeAttempts++;
-            attemptCountSpan.textContent = escapeAttempts;
-            escapeInput.value = '';
-            escapeError.classList.add('hidden');
-            escapeInput.focus();
-        }
-
-        // Məcburi çıxış pəncərəsini gizlət
-        function hideEscapeModal() {
-            escapeModal.classList.add('hidden');
-        }
-
-        // Kiliddən çıxmağa cəhd et (Yüksək Sürtünmə hissəsi)
-        function attemptEscape() {
-            const enteredText = escapeInput.value.trim();
-
-            if (enteredText === requiredPhrase) {
-                // Uğurlu çıxış!
-                clearInterval(timerInterval);
-                isLocked = false;
-                alertMessage("Diqqət pozuldu! Kiliddən uğurla çıxdınız. Fokus sessiyası ləğv edildi.", 'success');
-                resetApp();
-            } else {
-                // Uğursuz çıxış cəhdi
-                escapeError.classList.remove('hidden');
-                escapeInput.value = '';
-                // Taymerdən 1 dəqiqə cəza kəsilir (sürtünməni artırmaq üçün)
-                remainingSeconds = Math.max(0, remainingSeconds + 60); // 1 dəqiqə əlavə edildi
-                timerDisplay.textContent = formatTime(remainingSeconds);
-
-                alertMessage(`Səhv yazı. Fokusunuzu pozduğunuz üçün ${formatTime(60)} əlavə edildi!`, 'warning');
-            }
-        }
-
-        // Fərdiləşdirilmiş Bildiriş Qutusu (alert() əvəzinə)
-        function alertMessage(message, type) {
-            const oldAlert = document.getElementById('custom-alert');
-            if(oldAlert) oldAlert.remove();
-
-            const bgColor = type === 'success' ? 'bg-green-600' : (type === 'warning' ? 'bg-red-600' : 'bg-blue-600');
-
-            const alertDiv = document.createElement('div');
-            alertDiv.id = 'custom-alert';
-            alertDiv.className = `fixed top-4 left-1/2 transform -translate-x-1/2 p-4 rounded-xl shadow-xl text-white font-semibold z-50 transition-opacity duration-300 ${bgColor}`;
-            alertDiv.textContent = message;
-
-            document.body.appendChild(alertDiv);
-
-            setTimeout(() => {
-                alertDiv.classList.add('opacity-0');
-                setTimeout(() => alertDiv.remove(), 300);
-            }, 5000);
-        }
-
-        // Tətbiqi ilkləşdirmə
-        window.onload = function() {
-            resetApp();
-            // İstifadəçi təsadüfi olaraq tətbiqdən çıxdıqda
-            window.addEventListener('blur', () => {
-                 if (isLocked) {
-                    alertMessage("Geri qayıt! Fokus Kilidi aktivdir!", 'warning');
-                 }
-            });
+async function saveMvpIdea() {
+    if(!lastGeneratedDraft){showMessage("Önce bir MVP taslağı oluşturmalısınız.", true); return;}
+    try {
+        const path = getCollectionPath();
+        if(!path) throw new Error("Koleksiyon yolu bulunamadı.");
+        
+        // Save only the key strategic analysis points, not the large code files
+        const dataToSave = {
+            mvpName: lastGeneratedDraft.mvpName,
+            coreValueProp: lastGeneratedDraft.coreValueProp,
+            feasibilityScore: lastGeneratedDraft.feasibilityScore,
+            nicheAppeal: lastGeneratedDraft.nicheAppeal,
+            monetizationPlan: lastGeneratedDraft.monetizationPlan,
+            createdAt: serverTimestamp(),
+            userId: userId 
         };
-    </script>
+        
+        await addDoc(collection(db, path), dataToSave);
+        showMessage(`"${lastGeneratedDraft.mvpName}" başarıyla kaydedildi!`, false);
+        ideaInput.value=''; draftOutputCard.classList.add('hidden'); lastGeneratedDraft=null; saveButton.disabled=true;
+    } catch(e){console.error("Save Error:", e); showMessage("Fikir kaydedilemedi. Konsolu kontrol edin.", true);}
+}
 
+async function fetchWithBackoff(url, options, maxRetries=5){
+    let delay=1000;
+    for(let i=0;i<maxRetries;i++){
+        try{
+            const response=await fetch(url,options);
+            if(response.ok) return response;
+            else if(response.status===429 && i<maxRetries-1){await new Promise(r=>setTimeout(r,delay)); delay*=2;}
+            else { const errorData=await response.json(); throw new Error(`API hatası: ${response.status} - ${JSON.stringify(errorData)}`);}
+        }catch(err){if(i===maxRetries-1) throw err; await new Promise(r=>setTimeout(r,delay)); delay*=2;}
+    }
+}
+
+async function handleIdeaGeneration(){
+    const ideaText=ideaInput.value.trim();
+    if(ideaText.length<10){showMessage("Lütfen geçerli bir fikir girin (en az 10 karakter).", true); return;}
+    generateButton.disabled=true; saveButton.disabled=true; loader.classList.remove('hidden'); buttonText.textContent='Analiz ve Dosyalar Üretiliyor...'; errorMsg.classList.add('hidden'); draftOutputCard.classList.add('hidden');
+    
+    const apiUrl=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+    const systemPrompt=`Sen bir Hyper-SaaS Değer Analisti ve Kod Fabrikası'sın. Kullanıcının günlük, tek özellikli MVP hedefine ve 50 dolarlık kısıtlı pazarlama bütçesine göre analiz yapmalısın. Fikri değerlendirip puanla, para kazanma stratejisi oluştur ve dağıtıma hazır HTML/README dosyalarını üret. Puanlama Kriteri (1-10): Fikir 4-6 saatte yapılabilir mi? Düşük bütçeyle (50$) niş bir kitleye ulaşabilir mi? Yüksek puan, günlük hedefe uygun demektir. Yanıtın, her zaman aşağıdaki JSON şemasına uymalıdır. HTML kodu, tüm CSS/JS'i tek dosya içinde barındırmalı ve mobil uyumlu olmalıdır.`;
+    
+    const payload={contents:[{parts:[{text:`Kullanıcı Fikri: ${ideaText}` }]}], systemInstruction:{parts:[{text:systemPrompt}]}, generationConfig:{responseMimeType:"application/json", responseSchema:{type:"OBJECT", properties:{mvpName:{type:"STRING"}, coreValueProp:{type:"STRING"}, feasibilityScore:{type:"INTEGER"}, nicheAppeal:{type:"STRING"}, monetizationPlan:{type:"STRING"}, mvpHtmlFile:{type:"STRING"}, readmeMarkdown:{type:"STRING"}}, required:["mvpName","coreValueProp","feasibilityScore","nicheAppeal","monetizationPlan","mvpHtmlFile","readmeMarkdown"]}}};
+    
+    try{
+        const resp=await fetchWithBackoff(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+        const result=await resp.json();
+        const jsonText=result.candidates?.[0]?.content?.parts?.[0]?.text;
+        if(!jsonText) throw new Error("API'dan geçerli JSON yanıtı alınamadı.");
+        
+        lastGeneratedDraft=JSON.parse(jsonText);
+        displayDraft(lastGeneratedDraft);
+    }catch(e){console.error("Generation Error:", e); showMessage(`Dosyalar oluşturulamadı: ${e.message}`, true);}
+    finally{generateButton.disabled=false; loader.classList.add('hidden'); buttonText.textContent='Değer Analizi Yap & Dosyaları Üret'; saveButton.disabled=false; lucide.createIcons();}
+}
+
+function showFile(type) {
+    const panels = ['html', 'readme'];
+    panels.forEach(p => {
+        document.getElementById(`${p}-content`).classList.add('hidden');
+        document.getElementById(`tab-${p}`).classList.remove('active');
+    });
+    document.getElementById(`${type}-content`).classList.remove('hidden');
+    document.getElementById(`tab-${type}`).classList.add('active');
+}
+
+function copyContent(type) {
+    const elementId = type === 'html' ? 'mvp-html-code' : 'mvp-readme-code';
+    const textToCopy = document.getElementById(elementId).textContent;
+    
+    const textarea = document.createElement('textarea');
+    textarea.value = textToCopy;
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+        document.execCommand('copy');
+        showMessage(`${type.toUpperCase()} içeriği panoya kopyalandı!`, false);
+    } catch (err) {
+        console.error('Kopyalama başarısız:', err);
+        showMessage('Kopyalama başarısız oldu.', true);
+    }
+    document.body.removeChild(textarea);
+}
+
+function displayDraft(draft) {
+    draftOutputCard.classList.remove('hidden');
+    
+    // Populate summary
+    document.getElementById('mvp-name').textContent = draft.mvpName;
+    
+    // Hata verilen yer düzeltildi.
+    document.getElementById('mvp-value-prop').textContent = draft.coreValueProp;
+
+    // Display Score with color coding
+    const scoreElement = document.getElementById('feasibility-score');
+    scoreElement.textContent = `${draft.feasibilityScore}/10`;
+    scoreElement.classList.remove('bg-green-700', 'bg-yellow-700', 'bg-red-700');
+    if (draft.feasibilityScore >= 7) {
+        scoreElement.classList.add('bg-green-700');
+    } else if (draft.feasibilityScore >= 4) {
+        scoreElement.classList.add('bg-yellow-700');
+    } else {
+        scoreElement.classList.add('bg-red-700');
+    }
+    
+    document.getElementById('niche-appeal').textContent = draft.nicheAppeal;
+    document.getElementById('monetization-plan').textContent = draft.monetizationPlan;
+
+
+    // Populate code blocks
+    document.getElementById('mvp-html-code').textContent = draft.mvpHtmlFile;
+    document.getElementById('mvp-readme-code').textContent = draft.readmeMarkdown;
+    
+    // Reset to show HTML tab first
+    showFile('html');
+}
+
+function showMessage(message, isError) {
+    if (isError) {
+        errorMsg.textContent = message;
+        errorMsg.classList.remove('hidden');
+    } else {
+        const successDiv = document.createElement('div');
+        successDiv.className = 'fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-xl shadow-2xl transition-opacity duration-300 z-50';
+        successDiv.textContent = message;
+        document.body.appendChild(successDiv);
+        setTimeout(() => {
+            successDiv.style.opacity = '0';
+            setTimeout(() => successDiv.remove(), 300);
+        }, 4000);
+    }
+
+    if (isError) {
+         setTimeout(() => errorMsg.classList.add('hidden'), 8000);
+    }
+}
+</script>
 </body>
 </html>
-
