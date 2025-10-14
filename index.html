@@ -1,4 +1,3 @@
-Hyper SaaS :
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -6,88 +5,139 @@ Hyper SaaS :
     <title>Hyper-SaaS Değer Analizörü</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide ikonları için modül -->
     <script type="module" src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Genel Karanlık Mod ve Font Ayarları */
         :root { color-scheme: dark; }
         body { font-family: 'Inter', sans-serif; background-color: #121223; color: #e9e9f3; }
-        .card { background-color: #1a1a30; box-shadow: 0 8px 16px rgba(0,0,0,0.4); border: 1px solid #3a3a5a; }
-        .tab-button { background-color: #2b2b4e; color: #b0b0d0; transition: all 0.2s; }
-        .tab-button.active { background-color: #5a5a8f; color: #fff; font-weight: 600; }
-        .code-block { background-color: #0d0d18; border: 1px solid #3a3a5a; }
-        .score-box { font-size: 1.5rem; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.5rem; display:inline-block;}
-        .spinner { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid #fff; border-radius: 50%; width: 1.5rem; height: 1.5rem; animation: spin 1s linear infinite; display: inline-block; }
+        
+        /* Kart Stili */
+        .card { 
+            background-color: #1a1a30; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4); 
+            border: 1px solid #3a3a5a; 
+            border-radius: 1rem; /* Daha yuvarlak köşeler */
+        }
+        
+        /* Sekme Butonları */
+        .tab-button { 
+            background-color: #2b2b4e; 
+            color: #b0b0d0; 
+            transition: all 0.2s; 
+            border-bottom: 2px solid transparent; /* Varsayılan alt çizgi */
+        }
+        .tab-button.active { 
+            background-color: #1a1a30; /* Aktif sekme arka planı */
+            color: #fff; 
+            font-weight: 600; 
+            border-bottom-color: #dc2626; /* Kırmızı vurgu */
+        }
+        
+        /* Kod Bloğu ve Puan Kutusu */
+        .code-block { 
+            background-color: #0d0d18; 
+            border: 1px solid #3a3a5a; 
+            max-height: 400px; /* Sabit yükseklik sınırı */
+        }
+        .score-box { 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            padding: 0.5rem 1rem; 
+            border-radius: 0.5rem; 
+            display:inline-block;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        /* Yükleniyor Spinner'ı */
+        .spinner { 
+            border: 4px solid rgba(255, 255, 255, 0.3); 
+            border-top: 4px solid #fff; 
+            border-radius: 50%; 
+            width: 1.5rem; 
+            height: 1.5rem; 
+            animation: spin 1s linear infinite; 
+            display: inline-block; 
+        }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div id="app" class="min-h-screen p-4 sm:p-8 flex flex-col items-center">
+    <!-- Başlık Bölümü -->
     <header class="w-full max-w-7xl mb-8">
         <h1 class="text-4xl font-extrabold text-indigo-400 flex items-center">
             <i data-lucide="gauge" class="mr-3 w-8 h-8 text-red-400"></i> Hyper-SaaS Değer Analizörü
         </h1>
         <p class="text-gray-400 mt-2">Günlük MVP hedefinize uygunluk puanı ve anında para kazanma stratejisi ile fark yaratın.</p>
-        <p id="user-info" class="text-xs text-indigo-300 mt-2 font-mono">Kullanıcı ID: Yükleniyor...</p>
+        <p class="text-xs text-green-400 mt-2 font-mono">Verileriniz bu tarayıcıda LocalStorage ile otomatik olarak kaydedilmektedir.</p>
     </header>
 
+    <!-- Ana İçerik Alanı (Mobil Uyumlu Grid) -->
     <main class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <!-- Fikir Girişi -->
+        
+        <!-- Fikir Girişi ve Geçmiş (Sol Panel) -->
         <section class="lg:col-span-1 space-y-6">
-            <div class="card p-6 rounded-xl">
+            <!-- Fikir Girişi Kartı -->
+            <div class="card p-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-200 flex items-center">
                     <i data-lucide="sparkles" class="mr-2 w-5 h-5 text-yellow-400"></i> 1. Fikri Analiz Et
                 </h2>
-                <textarea id="idea-input" rows="5" class="w-full p-3 border border-gray-600 bg-gray-800 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-white" placeholder="Fikrinizi girin (Örn: Bir resimdeki renk paletini tek tıkla kopyalayan araç)."></textarea>
+                <textarea id="idea-input" rows="5" class="w-full p-3 border border-gray-600 bg-gray-800 rounded-lg focus:ring-red-500 focus:border-red-500 text-white placeholder-gray-500" placeholder="Fikrinizi girin (Örn: Bir resimdeki renk paletini tek tıkla kopyalayan araç)."></textarea>
                 <button id="generate-button" class="w-full mt-4 bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-50" onclick="handleIdeaGeneration()">
                     <span id="button-text">Değer Analizi Yap & Dosyaları Üret</span>
                     <div id="loader" class="spinner ml-3 hidden"></div>
                 </button>
-                <div id="error-message" class="mt-4 p-3 bg-red-900 rounded-lg text-sm hidden"></div>
+                <div id="error-message" class="mt-4 p-3 bg-red-900 rounded-lg text-sm text-red-300 hidden"></div>
             </div>
 
-            <!-- Dağıtım Geçmişi -->
-            <div class="card p-6 rounded-xl">
+            <!-- Dağıtım Geçmişi Kartı (LocalStorage) -->
+            <div class="card p-6">
                 <h2 class="text-xl font-semibold mb-4 text-gray-200 flex items-center">
-                    <i data-lucide="history" class="mr-2 w-5 h-5 text-indigo-400"></i> Dağıtım Kayıtları
+                    <i data-lucide="history" class="mr-2 w-5 h-5 text-indigo-400"></i> Analiz Geçmişi (Yerel)
                 </h2>
                 <div id="history-list" class="space-y-3 max-h-72 overflow-y-auto">
-                    <p class="text-gray-500 text-sm" id="history-loading">Geçmiş yükleniyor...</p>
+                    <!-- Geçmiş buradan JS ile yüklenecek -->
+                    <p class="text-gray-500 text-sm">Geçmiş yükleniyor...</p>
                 </div>
-                <button id="save-button" class="w-full mt-6 bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center disabled:opacity-50" onclick="saveMvpIdea()" disabled>
-                    <i data-lucide="archive" class="w-5 h-5 mr-2"></i> 4. Dağıtıldı Olarak Kaydet
+                <button id="clear-history-button" class="w-full mt-6 bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition duration-200 text-sm" onclick="clearHistory()">
+                    <i data-lucide="trash-2" class="w-4 h-4 mr-2 inline"></i> Geçmişi Temizle
                 </button>
             </div>
         </section>
 
-        <!-- Çıktılar -->
+        <!-- Çıktılar (Sağ Panel) -->
         <section class="lg:col-span-3 space-y-6">
-            <div id="draft-output-card" class="card p-6 rounded-xl hidden">
+            <div id="draft-output-card" class="card p-6 hidden">
+                
+                <!-- Fikir Skor Kartı -->
                 <h2 class="text-2xl font-bold mb-4 text-green-400 flex items-center">
                     <i data-lucide="briefcase-business" class="mr-2 w-6 h-6"></i> 2. Fikir Skor Kartı & Plan
                 </h2>
                 
-                <!-- Puan ve Niş Bilgileri -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <!-- Puan ve Niş Bilgileri Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div class="bg-indigo-900/50 p-4 rounded-xl border border-indigo-700">
                         <p class="text-sm text-gray-400">MVP Adı:</p>
-                        <p class="text-lg font-bold text-indigo-300" id="mvp-name"></p>
+                        <p class="text-lg font-bold text-indigo-300" id="mvp-name">Yükleniyor...</p>
                     </div>
                     <div class="bg-green-900/50 p-4 rounded-xl border border-green-700">
                         <p class="text-sm text-gray-400">Hız/Uygunluk Puanı (1-10):</p>
-                        <div class="score-box text-green-400" id="feasibility-score"></div>
+                        <div class="score-box text-green-400" id="feasibility-score">?</div>
                     </div>
                     <div class="bg-yellow-900/50 p-4 rounded-xl border border-yellow-700">
                         <p class="text-sm text-gray-400">Hedef Niş:</p>
-                        <p class="text-lg font-bold text-yellow-300" id="niche-appeal"></p>
+                        <p class="text-lg font-bold text-yellow-300" id="niche-appeal">Yükleniyor...</p>
                     </div>
                 </div>
 
-                <!-- DÜZELTME YAPILAN YER: Temel Değer Önerisi Eklendi -->
+                <!-- Temel Değer Önerisi -->
                 <div class="bg-gray-800 p-4 rounded-xl mb-6 border border-gray-700">
                     <h3 class="text-lg font-bold text-indigo-400 mb-1 flex items-center">
                         <i data-lucide="flag" class="mr-2 w-5 h-5"></i> Temel Değer Önerisi (Core Value Prop)
                     </h3>
-                    <p class="text-sm text-gray-300" id="mvp-value-prop"></p> 
+                    <p class="text-sm text-gray-300" id="mvp-value-prop">Yükleniyor...</p> 
                 </div>
                 
                 <!-- Para Kazanma Stratejisi -->
@@ -95,14 +145,15 @@ Hyper SaaS :
                     <h3 class="text-lg font-bold text-red-400 mb-2 flex items-center">
                         <i data-lucide="dollar-sign" class="mr-2 w-5 h-5"></i> Önerilen Para Kazanma Stratejisi
                     </h3>
-                    <p class="text-sm text-gray-300" id="monetization-plan"></p>
+                    <p class="text-sm text-gray-300" id="monetization-plan">Yükleniyor...</p>
                 </div>
 
+                <!-- Dağıtıma Hazır Dosyalar -->
                 <h2 class="text-2xl font-bold mb-4 text-white flex items-center">
                     <i data-lucide="code-square" class="mr-2 w-6 h-6"></i> 3. Dağıtıma Hazır Dosyalar
                 </h2>
 
-                <div class="flex space-x-2 border-b border-gray-700 mb-4">
+                <div class="flex space-x-2 border-b border-gray-700 mb-4 overflow-x-auto">
                     <button id="tab-html" class="tab-button active px-4 py-2 rounded-t-lg font-medium text-sm transition" onclick="showFile('html')">
                         <i data-lucide="file-code" class="inline w-4 h-4 mr-1"></i> MVP Uygulaması (.html)
                     </button>
@@ -113,12 +164,12 @@ Hyper SaaS :
 
                 <div id="file-content-container">
                     <div id="html-content" class="file-panel">
-                        <button class="copy-button bg-indigo-500 hover:bg-indigo-600 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('html')">Kopyala</button>
-                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-green-200"><code id="mvp-html-code"></code></pre>
+                        <button class="copy-button bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('html')">Kodu Kopyala</button>
+                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-green-200"><code id="mvp-html-code">Dosya içeriği bekleniyor...</code></pre>
                     </div>
                     <div id="readme-content" class="file-panel hidden">
-                        <button class="copy-button bg-indigo-500 hover:bg-indigo-600 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('readme')">Kopyala</button>
-                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-yellow-200"><code id="mvp-readme-code"></code></pre>
+                        <button class="copy-button bg-red-600 hover:bg-red-700 text-white text-xs py-1 px-3 rounded-md mb-2 float-right" onclick="copyContent('readme')">Kodu Kopyala</button>
+                        <pre class="code-block p-4 rounded-lg overflow-x-auto text-sm text-yellow-200"><code id="mvp-readme-code">Dosya içeriği bekleniyor...</code></pre>
                     </div>
                 </div>
             </div>
@@ -126,22 +177,22 @@ Hyper SaaS :
     </main>
 </div>
 
-<!-- Firebase + Gemini Logic -->
+<!-- Gemini API + LocalStorage Logic -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, addDoc, onSnapshot, collection, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-let db, auth, userId = null;
-const APP_COLLECTION_NAME = 'saas_factory_v2_ideas';
-const apiKey = ""; // Gemini API key
+// Gemini API Anahtarı
+const apiKey = ""; 
 let lastGeneratedDraft = null;
 
+// LocalStorage Anahtarı
+const MVP_HISTORY_KEY = 'hyper_saas_mvp_history';
+
+// Global fonksiyonları pencereye ekleme
 window.handleIdeaGeneration = handleIdeaGeneration;
-window.saveMvpIdea = saveMvpIdea;
 window.showFile = showFile;
 window.copyContent = copyContent;
+window.clearHistory = clearHistory;
 
+// DOM Elementleri
 const ideaInput = document.getElementById('idea-input');
 const generateButton = document.getElementById('generate-button');
 const loader = document.getElementById('loader');
@@ -149,124 +200,157 @@ const buttonText = document.getElementById('button-text');
 const draftOutputCard = document.getElementById('draft-output-card');
 const errorMsg = document.getElementById('error-message');
 const historyList = document.getElementById('history-list');
-const userInfo = document.getElementById('user-info');
-const saveButton = document.getElementById('save-button');
 
-// Firestore initialization variables
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+// --- LocalStorage İşlevleri ---
 
-if (firebaseConfig) {
-    const app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    auth = getAuth(app);
-
-    onAuthStateChanged(auth, async (user) => {
-        if (user) userId = user.uid;
-        else {
-            await signInAnonymously(auth);
-            userId = auth.currentUser?.uid || crypto.randomUUID();
-        }
-        userInfo.textContent = `Kullanıcı ID: ${userId.substring(0,8)}... (Tam ID: ${userId})`;
-        setupFirestoreListener();
-        lucide.createIcons();
-    });
-
-    if (initialAuthToken) {
-        signInWithCustomToken(auth, initialAuthToken).catch(() => signInAnonymously(auth));
-    } else signInAnonymously(auth);
-} else {
-    console.error("Firebase yapılandırması bulunamadı.");
-    historyList.innerHTML = '<p class="text-red-500">Firebase yapılandırması yüklenemedi.</p>';
-}
-
-function getCollectionPath() {
-    // Using the dynamically provided appId variable
-    return `artifacts/${appId}/users/${userId}/${APP_COLLECTION_NAME}`;
-}
-
-function setupFirestoreListener() {
-    const path = getCollectionPath();
-    if (!path) return;
-    const q = query(collection(db, path));
-    onSnapshot(q, (snapshot) => {
-        historyList.innerHTML = '';
-        if (snapshot.empty) {
-            historyList.innerHTML = '<p class="text-gray-500">Henüz dağıtılmış bir fikir yok. Fabrikayı çalıştırın!</p>';
-            return;
-        }
-        const ideas = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-            .sort((a,b)=> (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-        ideas.forEach(idea=>{
-            const item = document.createElement('div');
-            item.className='p-3 bg-gray-700 rounded-lg border border-gray-600 hover:bg-gray-600 transition duration-150';
-            const scoreColor = idea.feasibilityScore>=7?'text-green-400':idea.feasibilityScore>=4?'text-yellow-400':'text-red-400';
-            item.innerHTML=`<p class="font-semibold text-sm text-indigo-300">${idea.mvpName||'İsimsiz MVP'}</p>
-                <p class="text-xs text-gray-400 mt-0.5">${idea.nicheAppeal||'Niş Belirtilmemiş'}</p>
-                <p class="text-xs ${scoreColor} mt-1">Puan: ${idea.feasibilityScore||'?'}/10</p>`;
-            historyList.appendChild(item);
-        });
-    }, (err)=>{console.error("Firestore Error:", err); historyList.innerHTML='<p class="text-red-500">Geçmiş yüklenirken hata oluştu.</p>';});
-}
-
-async function saveMvpIdea() {
-    if(!lastGeneratedDraft){showMessage("Önce bir MVP taslağı oluşturmalısınız.", true); return;}
+/** Geçmişi LocalStorage'dan yükler ve ekranda gösterir. */
+function loadHistory() {
+    const historyString = localStorage.getItem(MVP_HISTORY_KEY);
     try {
-        const path = getCollectionPath();
-        if(!path) throw new Error("Koleksiyon yolu bulunamadı.");
-        
-        // Save only the key strategic analysis points, not the large code files
-        const dataToSave = {
-            mvpName: lastGeneratedDraft.mvpName,
-            coreValueProp: lastGeneratedDraft.coreValueProp,
-            feasibilityScore: lastGeneratedDraft.feasibilityScore,
-            nicheAppeal: lastGeneratedDraft.nicheAppeal,
-            monetizationPlan: lastGeneratedDraft.monetizationPlan,
-            createdAt: serverTimestamp(),
-            userId: userId 
-        };
-        
-        await addDoc(collection(db, path), dataToSave);
-        showMessage(`"${lastGeneratedDraft.mvpName}" başarıyla kaydedildi!`, false);
-        ideaInput.value=''; draftOutputCard.classList.add('hidden'); lastGeneratedDraft=null; saveButton.disabled=true;
-    } catch(e){console.error("Save Error:", e); showMessage("Fikir kaydedilemedi. Konsolu kontrol edin.", true);}
+        const history = historyString ? JSON.parse(historyString) : [];
+        displayHistory(history);
+        return history;
+    } catch (e) {
+        console.error("Geçmiş LocalStorage'dan çözümlenirken hata:", e);
+        return [];
+    }
 }
 
+/** Yeni bir taslağı geçmişe ekler ve LocalStorage'a kaydeder. */
+function saveHistory(draft) {
+    let history = loadHistory();
+    // Geçmişte saklanacak temel verileri seçme
+    const historyItem = {
+        mvpName: draft.mvpName,
+        feasibilityScore: draft.feasibilityScore,
+        nicheAppeal: draft.nicheAppeal,
+        createdAt: new Date().toISOString()
+    };
+    
+    // Yeni taslağı listenin başına ekle
+    history.unshift(historyItem);
+    
+    // Geçmişi son 20 kayıtla sınırla
+    history = history.slice(0, 20);
+    
+    localStorage.setItem(MVP_HISTORY_KEY, JSON.stringify(history));
+    displayHistory(history); // Ekranda hemen güncelle
+}
+
+/** Kaydedilen geçmiş verilerini ekrana yansıtır. */
+function displayHistory(ideas) {
+    historyList.innerHTML = '';
+    if (ideas.length === 0) {
+        historyList.innerHTML = '<p class="text-gray-500">Henüz kaydedilmiş bir fikir yok. Analiz yapın!</p>';
+        return;
+    }
+    
+    ideas.forEach(idea => {
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-gray-700 rounded-lg border border-gray-600 transition duration-150';
+        const scoreColor = idea.feasibilityScore >= 7 ? 'text-green-400' : idea.feasibilityScore >= 4 ? 'text-yellow-400' : 'text-red-400';
+        
+        // Tarih formatlama
+        const date = idea.createdAt ? new Date(idea.createdAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' }) : 'Bilinmiyor';
+
+        item.innerHTML = `<p class="font-semibold text-sm text-indigo-300">${idea.mvpName || 'İsimsiz MVP'}</p>
+            <p class="text-xs text-gray-400 mt-0.5">${idea.nicheAppeal || 'Niş Belirtilmemiş'} - <span class="text-gray-500">${date}</span></p>
+            <p class="text-xs ${scoreColor} mt-1">Puan: ${idea.feasibilityScore || '?'}/10</p>`;
+        historyList.appendChild(item);
+    });
+}
+
+/** Geçmişi LocalStorage'dan siler ve UI'ı günceller. */
+function clearHistory() {
+    localStorage.removeItem(MVP_HISTORY_KEY);
+    displayHistory([]);
+    showMessage("Geçmiş başarıyla temizlendi.", false);
+}
+
+
+// --- Gemini API ve UI İşlevleri ---
+
+/** Hata durumunda üssel geri çekilmeli (exponential backoff) fetch fonksiyonu */
 async function fetchWithBackoff(url, options, maxRetries=5){
     let delay=1000;
     for(let i=0;i<maxRetries;i++){
         try{
             const response=await fetch(url,options);
             if(response.ok) return response;
-            else if(response.status===429 && i<maxRetries-1){await new Promise(r=>setTimeout(r,delay)); delay*=2;}
-            else { const errorData=await response.json(); throw new Error(`API hatası: ${response.status} - ${JSON.stringify(errorData)}`);}
-        }catch(err){if(i===maxRetries-1) throw err; await new Promise(r=>setTimeout(r,delay)); delay*=2;}
+            else if(response.status===429 && i<maxRetries-1){
+                await new Promise(r=>setTimeout(r,delay)); 
+                delay*=2;
+            }
+            else { 
+                const errorData=await response.json(); 
+                throw new Error(`API hatası: ${response.status} - ${errorData.error?.message || JSON.stringify(errorData)}`);
+            }
+        }catch(err){
+            if(i===maxRetries-1) throw err; 
+            await new Promise(r=>setTimeout(r,delay)); 
+            delay*=2;
+        }
     }
 }
 
+/** Gemini API ile Fikir Üretimi ve Analizi */
 async function handleIdeaGeneration(){
     const ideaText=ideaInput.value.trim();
     if(ideaText.length<10){showMessage("Lütfen geçerli bir fikir girin (en az 10 karakter).", true); return;}
-    generateButton.disabled=true; saveButton.disabled=true; loader.classList.remove('hidden'); buttonText.textContent='Analiz ve Dosyalar Üretiliyor...'; errorMsg.classList.add('hidden'); draftOutputCard.classList.add('hidden');
     
+    // UI'ı güncelle
+    generateButton.disabled=true; 
+    loader.classList.remove('hidden'); 
+    buttonText.textContent='Analiz ve Dosyalar Üretiliyor...'; 
+    errorMsg.classList.add('hidden'); 
+    draftOutputCard.classList.add('hidden');
+    
+    // API Hazırlığı
     const apiUrl=`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-    const systemPrompt=`Sen bir Hyper-SaaS Değer Analisti ve Kod Fabrikası'sın. Kullanıcının günlük, tek özellikli MVP hedefine ve 50 dolarlık kısıtlı pazarlama bütçesine göre analiz yapmalısın. Fikri değerlendirip puanla, para kazanma stratejisi oluştur ve dağıtıma hazır HTML/README dosyalarını üret. Puanlama Kriteri (1-10): Fikir 4-6 saatte yapılabilir mi? Düşük bütçeyle (50$) niş bir kitleye ulaşabilir mi? Yüksek puan, günlük hedefe uygun demektir. Yanıtın, her zaman aşağıdaki JSON şemasına uymalıdır. HTML kodu, tüm CSS/JS'i tek dosya içinde barındırmalı ve mobil uyumlu olmalıdır.`;
+    const systemPrompt=`Sen bir Hyper-SaaS Değer Analisti ve Kod Fabrikası'sın. Kullanıcının günlük, tek özellikli MVP hedefine ve 50 dolarlık kısıtlı pazarlama bütçesine göre analiz yapmalısın. Fikri değerlendirip puanla, para kazanma stratejisi oluştur ve dağıtıma hazır HTML/README dosyalarını üret. Puanlama Kriteri (1-10): Fikir 4-6 saatte yapılabilir mi? Düşük bütçeyle (50$) niş bir kitleye ulaşabilir mi? Yüksek puan, günlük hedefe uygun demektir. Yanıtın, her zaman aşağıdaki JSON şemasına uymalıdır. HTML kodu, tüm CSS/JS'i tek dosya içinde barındırmalı ve mobil uyumlu, Tailwind CSS'li, modern görünümlü bir web uygulaması olmalıdır.`;
     
-    const payload={contents:[{parts:[{text:`Kullanıcı Fikri: ${ideaText}` }]}], systemInstruction:{parts:[{text:systemPrompt}]}, generationConfig:{responseMimeType:"application/json", responseSchema:{type:"OBJECT", properties:{mvpName:{type:"STRING"}, coreValueProp:{type:"STRING"}, feasibilityScore:{type:"INTEGER"}, nicheAppeal:{type:"STRING"}, monetizationPlan:{type:"STRING"}, mvpHtmlFile:{type:"STRING"}, readmeMarkdown:{type:"STRING"}}, required:["mvpName","coreValueProp","feasibilityScore","nicheAppeal","monetizationPlan","mvpHtmlFile","readmeMarkdown"]}}};
+    const payload={
+        contents:[{parts:[{text:`Kullanıcı Fikri: ${ideaText}` }]}], 
+        systemInstruction:{parts:[{text:systemPrompt}]}, 
+        generationConfig:{
+            responseMimeType:"application/json", 
+            responseSchema:{
+                type:"OBJECT", 
+                properties:{
+                    mvpName:{type:"STRING"}, coreValueProp:{type:"STRING"}, feasibilityScore:{type:"INTEGER"}, 
+                    nicheAppeal:{type:"STRING"}, monetizationPlan:{type:"STRING"}, mvpHtmlFile:{type:"STRING"}, 
+                    readmeMarkdown:{type:"STRING"}
+                }, 
+                required:["mvpName","coreValueProp","feasibilityScore","nicheAppeal","monetizationPlan","mvpHtmlFile","readmeMarkdown"]
+            }
+        }
+    };
     
     try{
         const resp=await fetchWithBackoff(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
         const result=await resp.json();
         const jsonText=result.candidates?.[0]?.content?.parts?.[0]?.text;
-        if(!jsonText) throw new Error("API'dan geçerli JSON yanıtı alınamadı.");
+        
+        if(!jsonText) throw new Error("API'dan geçerli JSON yanıtı alınamadı veya içerik boş.");
         
         lastGeneratedDraft=JSON.parse(jsonText);
         displayDraft(lastGeneratedDraft);
-    }catch(e){console.error("Generation Error:", e); showMessage(`Dosyalar oluşturulamadı: ${e.message}`, true);}
-    finally{generateButton.disabled=false; loader.classList.add('hidden'); buttonText.textContent='Değer Analizi Yap & Dosyaları Üret'; saveButton.disabled=false; lucide.createIcons();}
+        saveHistory(lastGeneratedDraft); // BAŞARILI ANALİZ SONUCUNU LocalStorage'a kaydet
+        
+    }catch(e){
+        console.error("Generation Error:", e); 
+        showMessage(`Dosyalar oluşturulamadı: ${e.message}`, true);
+    }
+    finally{
+        // UI'ı sıfırla
+        generateButton.disabled=false; 
+        loader.classList.add('hidden'); 
+        buttonText.textContent='Değer Analizi Yap & Dosyaları Üret'; 
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
 }
 
+/** Sekme Değiştirme */
 function showFile(type) {
     const panels = ['html', 'readme'];
     panels.forEach(p => {
@@ -277,6 +361,7 @@ function showFile(type) {
     document.getElementById(`tab-${type}`).classList.add('active');
 }
 
+/** Panoya Kopyalama */
 function copyContent(type) {
     const elementId = type === 'html' ? 'mvp-html-code' : 'mvp-readme-code';
     const textToCopy = document.getElementById(elementId).textContent;
@@ -287,7 +372,7 @@ function copyContent(type) {
     textarea.select();
     
     try {
-        document.execCommand('copy');
+        document.execCommand('copy'); 
         showMessage(`${type.toUpperCase()} içeriği panoya kopyalandı!`, false);
     } catch (err) {
         console.error('Kopyalama başarısız:', err);
@@ -296,16 +381,15 @@ function copyContent(type) {
     document.body.removeChild(textarea);
 }
 
+/** Analiz Sonucunu Ekrana Yansıtma */
 function displayDraft(draft) {
     draftOutputCard.classList.remove('hidden');
     
-    // Populate summary
+    // Özet bilgileri doldur
     document.getElementById('mvp-name').textContent = draft.mvpName;
-    
-    // Hata verilen yer düzeltildi.
     document.getElementById('mvp-value-prop').textContent = draft.coreValueProp;
 
-    // Display Score with color coding
+    // Puanı ve renk kodunu ayarla
     const scoreElement = document.getElementById('feasibility-score');
     scoreElement.textContent = `${draft.feasibilityScore}/10`;
     scoreElement.classList.remove('bg-green-700', 'bg-yellow-700', 'bg-red-700');
@@ -321,21 +405,22 @@ function displayDraft(draft) {
     document.getElementById('monetization-plan').textContent = draft.monetizationPlan;
 
 
-    // Populate code blocks
+    // Kod bloklarını doldur
     document.getElementById('mvp-html-code').textContent = draft.mvpHtmlFile;
     document.getElementById('mvp-readme-code').textContent = draft.readmeMarkdown;
     
-    // Reset to show HTML tab first
+    // Varsayılan olarak HTML sekmesini göster
     showFile('html');
 }
 
+/** Kullanıcıya anlık mesaj gösterme (toast veya hata) */
 function showMessage(message, isError) {
     if (isError) {
         errorMsg.textContent = message;
         errorMsg.classList.remove('hidden');
     } else {
         const successDiv = document.createElement('div');
-        successDiv.className = 'fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-xl shadow-2xl transition-opacity duration-300 z-50';
+        successDiv.className = 'fixed bottom-4 right-4 bg-green-600 text-white p-3 rounded-xl shadow-2xl transition-opacity duration-300 z-50';
         successDiv.textContent = message;
         document.body.appendChild(successDiv);
         setTimeout(() => {
@@ -348,6 +433,14 @@ function showMessage(message, isError) {
          setTimeout(() => errorMsg.classList.add('hidden'), 8000);
     }
 }
+
+// Uygulama yüklendikten sonra ikonları oluştur ve geçmişi yükle
+window.onload = () => {
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    loadHistory(); // Sayfa yüklendiğinde geçmişi LocalStorage'dan yükle
+};
+
 </script>
 </body>
 </html>
+
